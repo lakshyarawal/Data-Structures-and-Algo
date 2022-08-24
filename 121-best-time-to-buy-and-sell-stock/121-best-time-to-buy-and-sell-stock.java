@@ -5,7 +5,7 @@ class Solution {
         int maxProfit = 0;
         
         for(int i = 1; i < prices.length; i += 1){
-            lowestBuy = Math.min(prices[i-1], lowestBuy);
+            if (prices[i-1] < lowestBuy) lowestBuy = prices[i-1];
             if(prices[i] - lowestBuy > maxProfit){
                 maxProfit = prices[i] - lowestBuy;
             }
