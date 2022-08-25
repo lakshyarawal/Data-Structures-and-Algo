@@ -3,10 +3,12 @@ class Solution {
         // create an array to store the max increasing length till this point of array
         // iterate through all elements smaller than nums[i] and find the max len in above array
         // keep track of the max length found and add one to it for current element
+        
         int n = nums.length;
         int[] longestIncYet = new int[n];
         longestIncYet[0] = 1;
         int maxSublen = 1;
+        
         
         for(int i = 1; i < n; i += 1){
             int curr_max = 1;
@@ -17,7 +19,6 @@ class Solution {
                     curr_max = Math.max(longestIncYet[i], curr_max);
                 }
             }
-            System.out.println(longestIncYet[i]);
             maxSublen = Math.max(maxSublen, longestIncYet[i]);
             
              
