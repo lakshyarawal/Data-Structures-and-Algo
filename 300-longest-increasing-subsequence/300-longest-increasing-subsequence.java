@@ -6,17 +6,16 @@ class Solution {
         
         int n = nums.length;
         int[] longestIncYet = new int[n];
-        longestIncYet[0] = 1;
+        longestIncYet[n-1] = 1;
         int maxSublen = 1;
         
         
-        for(int i = 1; i < n; i += 1){
-            int curr_max = 1;
+        for(int i = n-2; i > -1; i -= 1){
             longestIncYet[i] = 1;
-            for(int j = 0; j < i; j += 1){
-                if(nums[j] < nums[i]){
-                    longestIncYet[i] = Math.max(longestIncYet[j] + 1, curr_max);
-                    curr_max = Math.max(longestIncYet[i], curr_max);
+            for(int j = i+1; j < n; j += 1){
+                if(nums[j] > nums[i]){
+                    longestIncYet[i] = Math.max(longestIncYet[j] + 1, longestIncYet[i]);
+                    
                 }
             }
             maxSublen = Math.max(maxSublen, longestIncYet[i]);
