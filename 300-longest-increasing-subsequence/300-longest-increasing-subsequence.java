@@ -4,25 +4,24 @@ class Solution {
         // iterate through all elements smaller than nums[i] and find the max len in above array
         // keep track of the max length found and add one to it for current element
         
-        int n = nums.length;
-        int[] longestIncYet = new int[n];
-        longestIncYet[n-1] = 1;
-        int maxSublen = 1;
+         ArrayList<Integer> sub = new ArrayList<>();
+        sub.add(nums[0]);
         
-        
-        for(int i = n-2; i > -1; i -= 1){
-            longestIncYet[i] = 1;
-            for(int j = i+1; j < n; j += 1){
-                if(nums[j] > nums[i]){
-                    longestIncYet[i] = Math.max(longestIncYet[j] + 1, longestIncYet[i]);
-                    
+        for (int i = 1; i < nums.length; i++) {
+            int num = nums[i];
+            if (num > sub.get(sub.size() - 1)) {
+                sub.add(num);
+            } else {
+                // Find the first element in sub that is greater than or equal to num
+                int j = 0;
+                while (num > sub.get(j)) {
+                    j += 1;
                 }
+                
+                sub.set(j, num);
             }
-            maxSublen = Math.max(maxSublen, longestIncYet[i]);
-            
-             
         }
         
-        return maxSublen;
+        return sub.size();
     }
 }
