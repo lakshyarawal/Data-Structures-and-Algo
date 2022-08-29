@@ -4,19 +4,16 @@ class Solution {
 
     
     public boolean canJump(int[] nums) {
-        int n = nums.length;
-        int lastIndex = n-1;
+        int lastIndex = nums.length-1;
         
-        for(int i = n-2; i>= 0; i --){
-            int furthestIndex = Math.min(n-1, nums[i] + i);
-            for(int j = i + 1; j <= furthestIndex; j += 1){
-                if(j == lastIndex){
-                    lastIndex = i;
-                    break;
-                }
+        for(int i = nums.length-2; i>= 0; i --){
+            if(i + nums[i] >= lastIndex){
+                lastIndex = i;
             }
             
-        }
+            }
+            
+        
         
         if(lastIndex == 0){
             return true;
