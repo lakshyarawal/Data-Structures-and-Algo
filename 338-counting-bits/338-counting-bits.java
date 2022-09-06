@@ -1,17 +1,20 @@
 public class Solution {
-    private int popCount(int x) {
-        int count;
-        for (count = 0; x != 0; ++count) {
-            x &= x - 1; // zeroing out the least significant nonzero bit
-        }
-        return count;
-    }
-
     public int[] countBits(int n) {
         int[] ans = new int[n + 1];
-        for (int x = 0; x <= n; ++x) {
-            ans[x] = popCount(x);
+        int x = 0;
+        int b = 1;
+    
+        // [0, b) is calculated
+        while (b <= n) {
+            // generate [b, 2b) or [b, n) from [0, b)
+            while (x < b && x + b <= n) {
+                ans[x + b] = ans[x] + 1;
+                ++x;
+            }                         
+            x = 0; // reset x
+            b <<= 1; // b = 2b
         }
+                  
         return ans;
     }
 }
