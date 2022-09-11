@@ -24,7 +24,6 @@ class Solution {
                 
             }
         }
-        System.out.println(Arrays.deepToString(disArr));
         return disArr[l1][l2];
         
     }
