@@ -14,14 +14,11 @@ class Solution {
         }
         for(int i=1; i<= l1; i++){
             for(int j=1; j<=l2; j++){
-                int left = disArr[i - 1][j] + 1;
-                int down = disArr[i][j - 1] + 1;
                 int left_down = disArr[i - 1][j - 1];
                 if (word1.charAt(i - 1) != word2.charAt(j - 1))
                   left_down += 1;
-                disArr[i][j] = Math.min(left, Math.min(down, left_down));
-
-                
+                disArr[i][j] = Math.min(disArr[i - 1][j] + 1, 
+                                        Math.min(disArr[i][j - 1] + 1, left_down));
             }
         }
         return disArr[l1][l2];
