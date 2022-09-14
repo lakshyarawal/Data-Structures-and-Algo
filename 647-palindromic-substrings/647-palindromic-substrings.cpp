@@ -1,32 +1,36 @@
 class Solution {
-    public int countSubstrings(String s) {
-        int ans = 0;
-
-        for (int i = 0; i < s.length(); ++i) {
-            // odd-length palindromes, single character center
-            ans += countPalindromesAroundCenter(s, i, i);
-
-            // even-length palindromes, consecutive characters center
-            ans += countPalindromesAroundCenter(s, i, i + 1);
-        }
-
-        return ans;
+public:
+    bool isValid(int i, int n){
+        if(i>=0 && i<n)
+            return true;
+        return false;
     }
-
-    private int countPalindromesAroundCenter(String ss, int lo, int hi) {
-        int ans = 0;
-
-        while (lo >= 0 && hi < ss.length()) {
-            if (ss.charAt(lo) != ss.charAt(hi))
-                break;      // the first and last characters don't match!
-
-            // expand around the center
-            lo--;
-            hi++;
-
-            ans++;
+    int countSubstrings(string s) {
+        int n = s.size();
+        int cnt=0;
+        for(int i=0;i<s.size()-1;i++){
+            for(int j=1; ;j++){
+                if(isValid(i+j,n) && isValid(i-j,n) && s[i+j]==s[i-j]){
+                    cnt++;
+                }
+                else{
+                    break;
+                }
+            }
+            if(s[i]==s[i+1]){
+                cnt++;
+                for(int j=1; ;j++){
+                    if(isValid(i+1+j,n) && isValid(i-j,n) && s[i+1+j]==s[i-j]){
+                        cnt++;
+                    }
+                    else{
+                        break;
+                    }
+              }
+            }
+            
+            
         }
-
-        return ans;
+        return cnt+s.size();
     }
-}
+};
