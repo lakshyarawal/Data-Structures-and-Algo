@@ -1,19 +1,21 @@
 class Solution {
     public int maxResult(int[] nums, int k) {
-        int[] score = new int[nums.length];
-        score[0] = nums[0];
-        Deque<Integer> dq = new ArrayDeque<Integer>();
-        dq.offer(0);
-        for(int i=1; i< nums.length; i++){
-            while(dq.peekFirst() != null && dq.peekFirst() < i-k){
+        int n = nums.length;
+        int score = nums[0];
+        Deque<int[]> dq = new LinkedList<>();
+        dq.offerLast(new int[] { 0, score });
+        for (int i = 1; i < n; i++) {
+            // pop the old index
+            while (dq.peekFirst() != null && dq.peekFirst()[0] < i - k) {
                 dq.pollFirst();
             }
-            score[i] = nums[i] + score[dq.peekFirst()];
-            while (dq.peekLast() != null && score[i] >= score[dq.peekLast()]) {
+            score = dq.peek()[1] + nums[i];
+            // pop the smaller value
+            while (dq.peekLast() != null && score >= dq.peekLast()[1]) {
                 dq.pollLast();
             }
-            dq.offerLast(i);
+            dq.offerLast(new int[] { i, score });
         }
-        return score[nums.length-1];
+        return score;
     }
 }
