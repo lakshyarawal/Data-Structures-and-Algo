@@ -15,17 +15,18 @@
  */
 class Solution {
     public boolean isBalanced(TreeNode root) {
-        if(root == null) return true;
-        int l = checkDepth(root.left);
-        int r = checkDepth(root.right);
-        if(Math.abs(l-r) > 1) return false;
-        return isBalanced(root.left) && isBalanced(root.right);
+        return getHeight(root) != -1;
     }
     
-    private int checkDepth(TreeNode root){
-         if(root == null) return 0;
-        int l = checkDepth(root.left);
-        int r = checkDepth(root.right);
-        return 1 + Math.max(l, r);
+       private int getHeight(TreeNode node) {
+        if (node == null) return 0;
+
+        int left = getHeight(node.left);
+        int right = getHeight(node.right);
+
+        // left, right subtree is unbalanced or cur tree is unbalanced
+        if (left == -1 || right == -1 || Math.abs(left - right) > 1) return -1;
+
+        return Math.max(left, right) + 1;
     }
 }
