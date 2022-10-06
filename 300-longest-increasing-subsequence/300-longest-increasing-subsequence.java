@@ -1,42 +1,20 @@
 class Solution {
     public int lengthOfLIS(int[] nums) {
-        // create an array to store the max increasing length till this point of array
-        // iterate through all elements smaller than nums[i] and find the max len in above array
-        // keep track of the max length found and add one to it for current element
-        
-        ArrayList<Integer> sub = new ArrayList<>();
-        sub.add(nums[0]);
-        
-        for (int i = 1; i < nums.length; i++) {
-            int num = nums[i];
-            if (num > sub.get(sub.size() - 1)) {
-                sub.add(num);
-            } else {
-                int j = binarySearch(sub, num);
-                sub.set(j, num);
+        int[] res = new int[nums.length];
+        Arrays.fill(res, 1);
+        int max_res = 1;
+        for(int i = 1; i < nums.length; i++){
+            int j = i-1;
+            while(j >= 0){
+                if(nums[j] < nums[i]){
+                        res[i] = Math.max(res[i],  1 + res[j]);
+                    }
+                j--;
+                }
+             max_res = Math.max(max_res, res[i]); 
             }
-        }
-        
-        return sub.size();
-    }
-    private int binarySearch(ArrayList<Integer> sub, int num) {
-        int left = 0;
-        int right = sub.size() - 1;
-        int mid = (left + right) / 2;
-        
-        while (left < right) {
-            mid = (left + right) / 2;
-            if (sub.get(mid) == num) {
-                return mid;
-            }
-            
-            if (sub.get(mid) < num) {
-                left = mid + 1;
-            } else {
-                right = mid;
-            }
-        }
-        
-        return left;
+             
+        System.out.println(Arrays.toString(res));
+        return max_res;
     }
 }
