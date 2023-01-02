@@ -1,21 +1,25 @@
 class Solution {
-    public int totalSum;
     public int lastStoneWeightII(int[] stones) {
-        totalSum = 0;
-        for(int x : stones)
-            totalSum += x;
-        return helper(stones, 0, 0, new Integer[stones.length+1][stones.length*100+1]);
-    }
-        public int helper(int[] stones, int index, int currWeight, Integer[][] dp) {
-        if(dp[index][currWeight] != null)
-            return dp[index][currWeight];
-        int ans = 0;
-        if(index == stones.length) ans = Math.abs(2 * currWeight - totalSum);
-        else 
-            ans = Math.min(
-                            helper(stones, index+1, currWeight, dp),
-                            helper(stones, index+1, currWeight+stones[index], dp)
-                            );
-        return dp[index][currWeight] = ans;
+        int totalSum = 0;
+        int n = stones.length;
+        for(int s : stones){
+            totalSum += s;
+        }
+        boolean[] dp = new boolean[totalSum/2 + 1];
+        dp[0] = true;
+        int max_sum = 0;
+        for(int s : stones){
+            boolean[] temp = dp.clone();
+            for(int c = s; c <= totalSum/2; c++){
+                if(dp[c - s]){
+                    temp[c] = true;
+                    max_sum = Math.max(max_sum, c);
+                    if(c == totalSum/2) return totalSum - 2*c;
+                }
+            }
+            dp = temp;
+        }
+        return totalSum -2 * max_sum;
+            
     }
 }
