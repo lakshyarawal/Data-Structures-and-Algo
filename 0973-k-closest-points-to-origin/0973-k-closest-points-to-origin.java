@@ -1,10 +1,12 @@
 class Solution {
     public int[][] kClosest(int[][] points, int k) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
         HashMap<Integer, List<Integer>> hm = new HashMap<>();
+        int[] distance = new int[points.length];
         for(int i =0; i< points.length; i++){
             int d = (points[i][0]*points[i][0]) + (points[i][1]*points[i][1]);
             pq.add(d);
+            if(pq.size() > k) pq.poll();
             if(hm.containsKey(d)){
                 List<Integer> One = hm.get(d);
                 One.add(i);
