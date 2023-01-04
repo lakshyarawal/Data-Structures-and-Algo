@@ -1,35 +1,25 @@
 class Solution {
     public int[][] kClosest(int[][] points, int k) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
-        HashMap<Integer, List<Integer>> hm = new HashMap<>();
-        int[] distance = new int[points.length];
-        for(int i =0; i< points.length; i++){
-            int d = (points[i][0]*points[i][0]) + (points[i][1]*points[i][1]);
-            pq.add(d);
-            if(pq.size() > k) pq.poll();
-            if(hm.containsKey(d)){
-                List<Integer> One = hm.get(d);
-                One.add(i);
-                hm.put(d, One);
+        PriorityQueue<int[]> heap = new PriorityQueue<int[]>(new Comparator<int[]>() { 
+            @Override
+            public int compare(int[] left, int[] right) {
+                return getDistance(right) - getDistance(left);
             }
-            else{
-                List<Integer> One = new ArrayList<Integer>();
-                One.add(i);
-                hm.put(d, One);
-            }
-            
+        });
+        
+        for (int[] point: points) {
+            heap.add(point);
+            if (heap.size() > k)
+                heap.poll();
         }
-        int[][] results = new int[k][2];
-        int idx = 0;
-        while(k > 0){
-            int el = pq.poll();
-            //System.out.println(el);
-            List<Integer> curr = hm.get(el);
-            int id = curr.remove(0);
-            results[idx] = points[id];
-            idx++;
-            k--;
-        }
-        return results;
+        
+        int[][] result = new int[k][2];
+        while (k > 0)
+            result[--k] = heap.poll();
+        
+        return result;
+    }
+    private int getDistance(int [] point) {
+        return point[0] * point[0] + point[1] * point[1];
     }
 }
