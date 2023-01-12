@@ -1,38 +1,45 @@
 class Solution {
-    public int[] dfs(int node, int parent, Map<Integer, List<Integer>> adj,
-            char[] labels, int[] ans) {
-        // Store count of all alphabets in the subtree of the node.
-        int[] nodeCounts = new int[26];
-        nodeCounts[labels[node] - 'a'] = 1;
-
-        if (!adj.containsKey(node))
-            return nodeCounts;
-        for (int child : adj.get(node)) {
-            if (child == parent) {
-                continue;
-            }
-            int[] childCounts = dfs(child, node, adj, labels, ans);
-            // Add frequencies of the child node in the parent node's frequency array.
-            for (int i = 0; i < 26; i++) {
-                nodeCounts[i] += childCounts[i];
+     int [] result;
+      List<List<Integer>> adj;
+      boolean[] visited;
+    
+    public int[] dfs(int node, String labels){
+        visited[node] = true;
+        int[] count = new int[26];
+        //visiting all the neighbours of the current node
+        for(int nbr : adj.get(node)){
+            if(!visited[nbr]){
+                int [] adjCount = dfs(nbr, labels);
+                //updating the count array with the count of the subtrees of the neighbours
+                for(int i = 0 ; i < 26; i++){
+                    count[i] += adjCount[i];
+                }
             }
         }
-
-        ans[node] = nodeCounts[labels[node] - 'a'];
-        return nodeCounts;
+        //incrementing the count of the current node label
+        char ch = labels.charAt(node);
+        count[ch-'a']++;
+        //storing the count of the subtrees of the current node
+        result[node] = count[ch-'a'];
+        return count;
     }
 
     public int[] countSubTrees(int n, int[][] edges, String labels) {
-        Map<Integer, List<Integer>> adj = new HashMap<>();
-        for (int[] edge : edges) {
-            int a = edge[0], b = edge[1];
-            adj.computeIfAbsent(a, value -> new ArrayList<Integer>()).add(b);
-            adj.computeIfAbsent(b, value -> new ArrayList<Integer>()).add(a);
-        }
-
-        int[] ans = new int[n];
-        char[] label = labels.toCharArray();
-        dfs(0, -1, adj, label, ans);
-        return ans;
+        adj = new ArrayList<>(n);
+        result = new int[n];
+        //initializing the adjacency list
+        for(int i = 0; i < n; i++){
+            adj.add(new ArrayList<>());
+         }
+        //populating the adjacency list with the edges
+        for(int[] edge : edges){
+            adj.get(edge[0]).add(edge[1]);
+            adj.get(edge[1]).add(edge[0]);
+         }
+        //keep track of visited nodes
+        visited = new boolean[n];
+        //calling the dfs function to count the subtrees starting from the root node
+        dfs(0,labels);
+        return result;
     }
 }
