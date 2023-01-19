@@ -7,18 +7,31 @@ class Solution {
         for(int i = 0; i < p.length(); i++){
             char_count[p.charAt(i) - 'a']++;
         }
-        for(int j = 0; j < s.length() - p.length() + 1; j++){
-            //System.out.println("Checking for index: "+ j);
-            int[] temp = char_count.clone();
-            for(int i = j; i < j+p.length(); i++){
-                //System.out.println("Checking for char: "+ s.charAt(i) + " val: " +  temp[s.charAt(i) - 'a']);
-                temp[s.charAt(i) - 'a']--;
+        
+        int[] temp = new int[26];
+        for(int j = 0; j < s.length(); j++){
+            temp[s.charAt(j) - 'a']++;
+            if(j == p.length()-1){
+                Boolean isPos = true;
+                //System.out.println(Arrays.toString(temp));
+                //System.out.println(Arrays.toString(char_count));
+                for(int i = 0; i < temp.length; i++){
+                    if(temp[i] != char_count[i]) isPos = false;
+                }
+                if(isPos)indices.add(j-p.length()+1);
             }
-            Boolean isPos = true;
-            for(int k : temp){
-                if(k != 0) isPos = false;
+            if(j >= p.length()){
+                temp[s.charAt(j-p.length()) - 'a']--;
+                Boolean isPos = true;
+                //System.out.println("Index: "+ j);
+                //System.out.println(Arrays.toString(temp));
+                //System.out.println(Arrays.toString(char_count));
+                for(int i = 0; i < temp.length; i++){
+                    if(temp[i] != char_count[i]) isPos = false;
+                }
+                if(isPos)indices.add(j-p.length()+1);
             }
-            if(isPos)indices.add(j);
+            
             //System.out.println("Sum for index: "+  Arrays.stream(temp).sum());
         }
         
