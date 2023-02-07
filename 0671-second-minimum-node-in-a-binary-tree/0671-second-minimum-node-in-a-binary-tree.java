@@ -14,22 +14,22 @@
  * }
  */
 class Solution {
-    public void dfs(TreeNode root, Set<Integer> uniques) {
+    int min1;
+    long ans = Long.MAX_VALUE;
+
+    public void dfs(TreeNode root) {
         if (root != null) {
-            uniques.add(root.val);
-            dfs(root.left, uniques);
-            dfs(root.right, uniques);
+            if (min1 < root.val && root.val < ans) {
+                ans = root.val;
+            } else if (min1 == root.val) {
+                dfs(root.left);
+                dfs(root.right);
+            }
         }
     }
     public int findSecondMinimumValue(TreeNode root) {
-        Set<Integer> uniques = new HashSet<Integer>();
-        dfs(root, uniques);
-
-        int min1 = root.val;
-        long ans = Long.MAX_VALUE;
-        for (int v : uniques) {
-            if (min1 < v && v < ans) ans = v;
-        }
+        min1 = root.val;
+        dfs(root);
         return ans < Long.MAX_VALUE ? (int) ans : -1;
     }
 }
