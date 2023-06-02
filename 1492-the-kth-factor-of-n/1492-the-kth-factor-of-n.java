@@ -1,14 +1,24 @@
 class Solution {
+    Queue<Integer> heap = new PriorityQueue<>((o1, o2) -> o2 - o1);
+    
+    public void heappushK(int x, int k) {
+        heap.add(x);
+        if (heap.size() > k) {
+            heap.remove();    
+        }
+    }
+    
     public int kthFactor(int n, int k) {
-        ArrayList<Integer> factors = new ArrayList<>();
-        for(int i = 1; i <= n ; i++){
-            if(n % i == 0){
-                factors.add(i);
-            }
+        int sqrtN = (int) Math.sqrt(n);
+        for (int x = 1; x < sqrtN + 1; ++x) {
+            if (n % x == 0) {
+                heappushK(x, k);
+                if (x != n / x) {
+                    heappushK(n / x, k);    
+                }    
+            }    
         }
-        if(factors.size() < k){
-            return -1;
-        }
-        return factors.get(k-1);
+                
+        return k == heap.size() ? heap.poll() : -1;
     }
 }
