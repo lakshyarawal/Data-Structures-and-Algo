@@ -1,38 +1,23 @@
 class Solution {
     
-    public int[] remElement(int[] arr, int index) {
-        
-        for (int i = index + 1; i < arr.length; i++) {
-            arr[i - 1] = arr[i];
-        }
-        
-        return arr;
-    }    
-    
     public int removeDuplicates(int[] nums) {
 
-        int i = 1, count = 1, length = nums.length;
+        int j = 1, count = 1;
 
-        while (i < length) {
+        for (int i = 1; i < nums.length; i++) {
 
             if (nums[i] == nums[i - 1]) {
                 
                 count++;
-
-                if (count > 2) {
-                    
-                    this.remElement(nums, i);
-
-                    i--;
-                    length--;
-                }
+                
             } else {
+
                 count = 1;
             }
-                
-            i++;
+            if (count <= 2) {
+                nums[j++] = nums[i];
+            }
         }
-            
-        return length;
+        return j;
     }
 }
