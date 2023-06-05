@@ -1,21 +1,17 @@
 class Solution {
     public int jump(int[] nums) {
-        // The starting range of the first jump is [0, 0]
-        int answer = 0, n = nums.length;
-        int curEnd = 0, curFar = 0;
-        
-        for (int i = 0; i < n - 1; ++i) {
-            // Update the farthest reachable index of this jump.
-            curFar = Math.max(curFar, i + nums[i]);
+    int n = nums.length;
+	 if(n<2)return 0;
+	 int level=0,currentMax=0,i=0,nextMax=0;
 
-            // If we finish the starting range of this jump,
-            // Move on to the starting range of the next jump.
-            if (i == curEnd) {
-                answer++;
-                curEnd = curFar;
-            }
-        }
-        
-        return answer;
-    }
+	 while(currentMax-i+1>0){		//nodes count of current level>0
+		 level++;
+		 for(;i<=currentMax;i++){	//traverse current level , and update the max reach of next level
+			nextMax=Math.max(nextMax,nums[i]+i);
+			if(nextMax>=n-1)return level;   // if last element is in level+1,  then the min jump=level 
+		 }
+		 currentMax=nextMax;
+	 }
+	 return 0;
+ }
 }
