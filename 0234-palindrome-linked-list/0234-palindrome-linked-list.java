@@ -42,7 +42,7 @@ class Solution {
             if(head == null && temp.next == null) return true;
             if(head == null ) return false;
             if(temp == null) return false;
-            System.out.println("Temp: "+ temp.val + " Head: "+ head.val);
+            //System.out.println("Temp: "+ temp.val + " Head: "+ head.val);
             if(temp.val != head.val){
                 return false;
             }
