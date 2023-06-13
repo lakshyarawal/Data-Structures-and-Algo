@@ -1,57 +1,46 @@
 class MinStack {
 
-    private int size = 0;
-    private int capacity = 900;
-    private int[] minsBuffer;
-    private int[] buffer;
-    public MinStack() {
-        buffer = new int[capacity];
-        minsBuffer = new int[capacity];
-    }
-    
-    public void push(int val) {
-        if(isFull()) {
-            return;
-        }
-        
-        if(isEmpty()) {
-            
-            minsBuffer[size] = val;
-        }
-        else {
-            if (val < minsBuffer[size - 1]) {
-                minsBuffer[size] = val;
-            }
-            else {
-                minsBuffer[size] = minsBuffer[size - 1];
-            }
-        }
-        buffer[size] = val;
-        size++;
-    }
-    private boolean isEmpty() {
-        return size == 0;
-    }
-    private boolean isFull() {
-        return size == capacity;
-    }
-    public void pop() {
-        if(isEmpty()) {
-            return;
-        }
-        size--;
-    }
-    
-    public int top() {
-        return buffer[size - 1];
-    }
-    
-    public int getMin() {
-        return minsBuffer[size - 1];
-    }
+private Stack<Integer> minimums;
+private Stack<Integer> stack;
+
+/** initialize your data structure here. */
+public MinStack() {
+    minimums = new Stack<Integer>();
+    stack = new Stack<Integer>();
 }
 
-/**
+public void push(int val) {
+    // if we have a minimum and the new value is smaller than the current minimum
+    if ( !minimums.isEmpty() && val <= minimums.peek() )
+    {
+        minimums.push(val);
+    }
+    // if this is the first value
+    else if ( minimums.isEmpty() )
+    {
+        minimums.push(val);
+    }
+    stack.push(val);
+}
+
+public void pop() {
+    // if what we're popping is the current minimum
+    if ( (int)stack.peek() == (int)minimums.peek() )
+    {
+        minimums.pop();
+    }
+    stack.pop();
+}
+
+public int top() {
+    return stack.peek();
+}
+
+public int getMin() {
+    return minimums.peek(); 
+	}
+}
+ /**
  * Your MinStack object will be instantiated and called as such:
  * MinStack obj = new MinStack();
  * obj.push(val);
