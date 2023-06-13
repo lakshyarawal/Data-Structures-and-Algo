@@ -1,49 +1,37 @@
 class MinStack {
 
-private Stack<Integer> minimums;
-private Stack<Integer> stack;
-
-/** initialize your data structure here. */
-public MinStack() {
-    minimums = new Stack<Integer>();
-    stack = new Stack<Integer>();
-}
-
-public void push(int val) {
-    // if we have a minimum and the new value is smaller than the current minimum
-    if ( !minimums.isEmpty() && val <= minimums.peek() )
-    {
-        minimums.push(val);
+    Stack<Integer> stack, minStack;
+    
+    /** initialize your data structure here. */
+    public MinStack() {
+        stack = new Stack<>();
+        minStack = new Stack<>();
     }
-    // if this is the first value
-    else if ( minimums.isEmpty() )
-    {
-        minimums.push(val);
+    
+    public void push(int x) {
+        stack.push(x);
+        if (minStack.isEmpty() || getMin() >= x) minStack.push(x);
     }
-    stack.push(val);
-}
-
-public void pop() {
-    // if what we're popping is the current minimum
-    if ( (int)stack.peek() == (int)minimums.peek() )
-    {
-        minimums.pop();
+    
+    public void pop() {
+        if (stack.isEmpty()) return;
+        int elem = stack.pop();
+        if (elem == getMin()) minStack.pop();
     }
-    stack.pop();
+    
+    public int top() {
+        return stack.peek();
+    }
+    
+    public int getMin() {
+        return minStack.peek();
+    }
 }
 
-public int top() {
-    return stack.peek();
-}
-
-public int getMin() {
-    return minimums.peek(); 
-	}
-}
- /**
+/**
  * Your MinStack object will be instantiated and called as such:
  * MinStack obj = new MinStack();
- * obj.push(val);
+ * obj.push(x);
  * obj.pop();
  * int param_3 = obj.top();
  * int param_4 = obj.getMin();
