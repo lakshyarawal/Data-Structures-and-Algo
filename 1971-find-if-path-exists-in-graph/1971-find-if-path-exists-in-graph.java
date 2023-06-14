@@ -1,34 +1,40 @@
 class Solution {
-    public boolean validPath(int n, int[][] edges, int source, int destination) {
-        Map<Integer, List<Integer>> graph = new HashMap<>();
-        for (int[] edge : edges) {
-            int a = edge[0], b = edge[1];
-            graph.computeIfAbsent(a, val -> new ArrayList<Integer>()).add(b);
-            graph.computeIfAbsent(b, val -> new ArrayList<Integer>()).add(a);
+    private boolean seen;
+    
+    public boolean validPath(int n, int[][] edges, int start, int end) {
+        boolean[] visited = new boolean[n];
+        HashSet<Integer>[] graph = new HashSet[n];
+        int i, j;
+        
+        for(i = 0; i < n; i++){
+            graph[i] = new HashSet<Integer>();
         }
         
-        // Store all the nodes to be visited in 'queue'.
-        boolean[] seen = new boolean[n];
-        seen[source] = true;
-        Queue<Integer> queue = new LinkedList<>();
-        queue.offer(source);
-        
-        while (!queue.isEmpty()) {
-            int currNode = queue.poll();
-            if (currNode == destination) {
-                return true; 
-            }
-
-            // For all the neighbors of the current node, if we haven't visit it before,            
-            // add it to 'queue' and mark it as visited.
-            for (int nextNode : graph.get(currNode)) {
-                if (!seen[nextNode]) {
-                    seen[nextNode] = true;
-                    queue.offer(nextNode);
-                }
-            }
+        for(int[] edge : edges){
+            graph[edge[0]].add(edge[1]);
+            graph[edge[1]].add(edge[0]);
         }
         
-        return false;
+		if(graph[start].contains(end)){  // direct connection exists
+             return true;
+        }
+		
+        seen = false;
+        dfs(graph, visited, start, end);
+        return seen;
+    }
+    
+    private void dfs(HashSet<Integer>[] graph, boolean[] visited, int start, int end){
+        if(!visited[start] && !seen){
+            if(start == end){
+                seen = true;
+                return;
+            }
+            
+            visited[start] = true;
+            for(Integer neighbor : graph[start]){
+                dfs(graph, visited, neighbor, end);
+            }
+        }
     }
 }
