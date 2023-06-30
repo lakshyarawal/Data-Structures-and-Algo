@@ -13,7 +13,7 @@ class Solution {
             prev = curr;
         }
         
-        System.out.println(Arrays.toString(curr));
+        //System.out.println(Arrays.toString(curr));
         return curr[n-1];
     }
 }
