@@ -2,20 +2,20 @@ class Solution {
     public int uniquePaths(int m, int n) {
         if(m == 1 || n == 1) return 1;
         
-        int[] p = new int[n];
-        int[] c = new int[n];
+        int[] prev = new int[n];
+        int[] curr = new int[n];
         
-        Arrays.fill(p, 1);
-        c[0] = 1;
+        Arrays.fill(prev, 1);
+        curr[0] = 1;
         
         for(int i = 1; i < m; i++){
             for(int j = 1; j <n; j++){
-                c[j] = p[j] + c[j-1];
+                curr[j] = prev[j] + curr[j-1];
             }
-            p = c;
+            prev = curr;
         }
         
         //System.out.println(Arrays.toString(curr));
-        return c[n-1];
+        return curr[n-1];
     }
 }
