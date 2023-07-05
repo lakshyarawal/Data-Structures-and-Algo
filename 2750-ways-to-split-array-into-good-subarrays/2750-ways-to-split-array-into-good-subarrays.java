@@ -1,17 +1,14 @@
 class Solution {
     public int numberOfGoodSubarraySplits(int[] nums) {
-        long cnt = 0;
-        for (int lo = -1, hi = 0; hi < nums.length; ++hi) {
-            if (nums[hi] == 1) {
-                if (cnt == 0) {
-                    cnt = 1;
-                }else {
-                    cnt *= hi - lo;
-                    cnt %= 1_000_000_007;
-                }
-                lo = hi;
-            }
+        long ans = 1, m = 1000000007, count  = 0;
+        int i = 0;
+        while(i < nums.length && nums[i] == 0) ++i;
+        if(i >= nums.length) return 0;
+        while(i < nums.length){
+            if(nums[i] == 1){  ans = (ans * (count +1 ))%m;  count = 0; }
+            else count++;
+            i++;
         }
-        return (int)cnt;
+        return (int) ans;
     }
 }
