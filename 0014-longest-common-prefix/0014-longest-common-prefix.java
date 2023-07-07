@@ -12,7 +12,7 @@ class Solution {
         
         for(int i = 1; i < strs.length; i++){
             int newLcpLength = 0;
-            for(int j = 0; j < strs[i].length(); j++){
+            for(int j = 0; j < strs[i].length() && j <= lcpLength; j++){
                 if(lcpMap.containsKey(j) && strs[i].charAt(j) == lcpMap.get(j)){
                     newLcpLength++;
                 }else{
