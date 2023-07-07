@@ -9,21 +9,25 @@
  * }
  */
 class Solution {
-    public ListNode recMerge(ListNode[] lists, int s, int e){
-        if(s == e) return lists[s];
-        if(s < e){
-            int mid = (s+e)/2;
-            System.out.println(mid);
-            ListNode left = recMerge(lists, s, mid);
-            ListNode right = recMerge(lists, mid+1, e);  
-            return merge(left, right);
-        }else{
-            return null;
-        } 
+
+    private ListNode divideAndConquer(ListNode[] lists, int lo, int hi) {
+      if (lo > hi) { // invalid
+        return null;
+      }
+      if (lo == hi) { // size = 1
+        return lists[lo];
+      }
+      int mid = lo + (hi - lo) / 2; // left-leaning
+      ListNode left = divideAndConquer(lists, lo, mid);
+      ListNode right = divideAndConquer(lists, mid + 1, hi);
+      return merge(left, right);
     }
     
     public ListNode mergeKLists(ListNode[] lists) {
-        return recMerge(lists, 0, lists.length-1);
+      if (lists == null || lists.length == 0) {
+        return null;
+      }
+      return divideAndConquer(lists, 0, lists.length - 1);
     }
     
     //This function is from Merge Two Sorted Lists.
