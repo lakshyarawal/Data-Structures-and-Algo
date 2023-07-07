@@ -10,35 +10,31 @@
  */
 class Solution {
 
-    private ListNode divideAndConquer(ListNode[] lists, int lo, int hi) {
-      if (lo > hi) { // invalid
-        return null;
-      }
-      if (lo == hi) { // size = 1
-        return lists[lo];
-      }
-      int mid = lo + (hi - lo) / 2; // left-leaning
-      ListNode left = divideAndConquer(lists, lo, mid);
-      ListNode right = divideAndConquer(lists, mid + 1, hi);
-      return merge(left, right);
-    }
-    
     public ListNode mergeKLists(ListNode[] lists) {
-      if (lists == null || lists.length == 0) {
-        return null;
-      }
-      return divideAndConquer(lists, 0, lists.length - 1);
+        //edge case []
+        if (lists.length == 0) return null;
+        return partition(lists, 0, lists.length-1);
     }
     
-    //This function is from Merge Two Sorted Lists.
-    public static ListNode merge(ListNode l1,ListNode l2){
-        if(l1==null) return l2;
-        if(l2==null) return l1;
-        if(l1.val<l2.val){
-            l1.next=merge(l1.next,l2);
+    public ListNode partition(ListNode[] lists, int start, int end) {
+        if (start == end) return lists[start];
+        
+        // start will always be less than or equal to end
+        int mid = (start + end) / 2;
+        ListNode l1 = partition(lists, start, mid);
+        ListNode l2 = partition(lists, mid+1, end);
+        return mergeTwo(l1, l2);
+    }
+    
+    public ListNode mergeTwo(ListNode l1, ListNode l2) {
+        if (l1==null) return l2;
+        if (l2==null) return l1;
+        
+        if (l1.val < l2.val) {
+            l1.next = mergeTwo(l1.next, l2);
             return l1;
-        }else{
-            l2.next=merge(l1,l2.next);
+        } else {
+            l2.next = mergeTwo(l1, l2.next);
             return l2;
         }
     }
