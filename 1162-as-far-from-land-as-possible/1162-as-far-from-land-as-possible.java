@@ -1,41 +1,39 @@
 class Solution {
     public int maxDistance(int[][] grid) {
-        int rows = grid.length;
-        // Although it's a square matrix, using different variable for readability.
-        int cols = grid[0].length;
-        
-        // Maximum manhattan distance possible + 1.
-        final int MAX_DISTANCE = rows + cols + 1;
-
-        // First pass: check for left and top neighbours
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (grid[i][j] == 1) {
-                    // Distance of land cells will be 0.
-                    grid[i][j] = 0;
-                } else {
-                    grid[i][j] = MAX_DISTANCE;
-                    // Check left and top cell distances if they exist and update the current cell distance.
-                    grid[i][j] = Math.min(grid[i][j], Math.min(i > 0 ? grid[i - 1][j] + 1 : MAX_DISTANCE,
-                                                               j > 0 ? grid[i][j - 1] + 1 : MAX_DISTANCE));
+        int n = grid.length;
+        int[][] visited = new int[n][n];
+        int[][] directions = new int[][]{{-1, 0} , {1, 0} , {0, 1} , {0, -1}};
+        Queue<Pair<Integer, Integer>> q = new LinkedList<>();
+        for(int i = 0; i <n; i++){
+            for(int j =0; j < n; j++){
+                if(grid[i][j] == 1){
+                    visited[i][j] = 1;
+                    q.offer(new Pair(i, j));
                 }
             }
         }
+        
+        int distance = -1;
+        
+        while(!q.isEmpty()){
+            int qSize = q.size();
+            for(int i = 0; i< qSize; i++){
+                Pair<Integer, Integer> landCell = q.poll();
+                int r = landCell.getKey();
+                int c = landCell.getValue();
 
-        // Second pass: check for the bottom and right neighbours.
-        int ans = Integer.MIN_VALUE;
-        for (int i = rows - 1; i >= 0; i--) {
-            for (int j = cols - 1; j >= 0; j--) {
-                // Check the right and bottom cell distances if they exist and update the current cell distance.
-                grid[i][j] = Math.min(grid[i][j], Math.min(i < rows - 1 ? grid[i + 1][j] + 1 : MAX_DISTANCE,
-                                                           j < cols - 1 ? grid[i][j + 1] + 1 : MAX_DISTANCE));
-                
-                ans = Math.max(ans, grid[i][j]);
+                for(int[] d : directions){
+                    int x = r + d[0];
+                    int y = c + d[1];
+                    if(x >= 0 && y >= 0 && x < n && y < n && visited[x][y] == 0){
+                        visited[x][y] = 1;
+                        q.offer(new Pair(x, y));
+                    }
+                }  
             }
+            distance++; 
         }
-
-        // If ans is 1, it means there is no water cell,
-        // If ans is MAX_DISTANCE, it implies no land cell.
-        return ans == 0 || ans == MAX_DISTANCE ? -1 : ans;
+        
+        return distance == 0 ? -1: distance;
     }
-};
+}
