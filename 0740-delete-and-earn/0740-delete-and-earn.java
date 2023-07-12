@@ -1,20 +1,21 @@
 class Solution {
     public int deleteAndEarn(int[] nums) {
-        Map<Integer, Integer> hm = new HashMap<>();
-        int maxVal = 0;
-        
-        for (int n: nums) 
-		{
-            hm.put(n, (hm.getOrDefault(n, 0) + 1));
-            maxVal = Math.max(maxVal, n);
+        int[] sum = new int[10001];
+        int min = 10001;
+        int max = 0;
+        for (int num : nums) {
+            sum[num] += num;
+            min = Math.min(num,min);
+            max = Math.max(num,max);
+            
         }
         
-        int[] dp = new int[maxVal+1];
-        dp[1] = 1 * hm.getOrDefault(1, 0);
+        int[] dp = new int[max+1];
+        dp[min] = sum[min];
+        for (int i = min+1; i <= max; i++) {
+            dp[i] = Math.max(dp[i - 1], dp[i - 2] + sum[i]);
+        }
         
-        for (int i = 2; i <= maxVal; i++) 
-            dp[i] = Math.max(dp[i-1], dp[i-2] + i * hm.getOrDefault(i, 0));
-        
-        return dp[maxVal];
+        return dp[max];
     }
 }
