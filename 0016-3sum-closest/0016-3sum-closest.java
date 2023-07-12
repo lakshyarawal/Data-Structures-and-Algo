@@ -1,29 +1,32 @@
+
 class Solution {
     public int threeSumClosest(int[] nums, int target) {
-        int result = nums[0] + nums[1] + nums[nums.length -1];
-        Arrays.sort(nums);
-        int sum = 0;
-        int diff = 0;
+        Arrays.sort(nums); // Sort the array to optimize the two-pointer approach
+        int closestSum = nums[0] + nums[1] + nums[2]; // Initialize the closest sum
 
-        for(int i = 0;i<nums.length - 2;i++){
-            int ptr1 = i + 1;
-            int ptr2 = nums.length -1;
+        for (int i = 0; i < nums.length - 2; i++) {
+            int left = i + 1; // Pointer from the next element
+            int right = nums.length - 1; // Pointer from the last element
 
-            while(ptr2 > ptr1){
-                sum = nums[i] + nums[ptr1] + nums[ptr2];
-                if(sum > target){
-                    ptr2--;
-                }
-                else{
-                    ptr1++;
-                }
-                if(Math.abs(sum - target) < Math.abs(result - target)){
-                    result = sum;
+            while (left < right) {
+                int sum = nums[i] + nums[left] + nums[right];
+                if (sum == target) {
+                    return target; // Found an exact match, return the target sum
                 }
 
+                // Update the closest sum if the current sum is closer to the target
+                if (Math.abs(sum - target) < Math.abs(closestSum - target)) {
+                    closestSum = sum;
+                }
+
+                if (sum < target) {
+                    left++; // Move the left pointer to increase the sum
+                } else {
+                    right--; // Move the right pointer to decrease the sum
+                }
             }
         }
-        return result;
-        
+
+        return closestSum;
     }
 }
