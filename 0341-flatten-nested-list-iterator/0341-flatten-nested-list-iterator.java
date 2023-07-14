@@ -15,35 +15,34 @@
  *     public List<NestedInteger> getList();
  * }
  */
-public class NestedIterator implements Iterator<Integer> {
-    Deque<NestedInteger> stack = new ArrayDeque<>();
-    public NestedIterator(List<NestedInteger> nestedList) {
-        prepareStack(nestedList);
-    }
+	public class NestedIterator implements Iterator<Integer> {
 
-    @Override
-    public Integer next() {
-        if (!hasNext()) {
-            return null;
-        }
-        return stack.pop().getInteger();
-    }
+	  List<Integer> list=new ArrayList<>();
+	  int p=0;
 
-    @Override
-    public boolean hasNext() {
-        while (!stack.isEmpty() && !stack.peek().isInteger()) {
-            List<NestedInteger> list = stack.pop().getList();
-            prepareStack(list);
-        }
-        return !stack.isEmpty();
-    }
-    
-    private void prepareStack(List<NestedInteger> nestedList) {
-        for (int i = nestedList.size() - 1; i >= 0; i--) {
-            stack.push(nestedList.get(i));
-        }
-    }
-}
+		public NestedIterator(List<NestedInteger> nestedList) {
+		  method(nestedList);
+		  }
+	  void method(List<NestedInteger> nestedList){
+		  for(NestedInteger i:nestedList){
+			if(i.isInteger())
+			  list.add(i.getInteger());
+			else
+			  method(i.getList());
+			}
+	  }
+
+
+		@Override
+		public Integer next() {
+			return list.get(p++);
+		}
+
+		@Override
+		public boolean hasNext() {
+			return p<(list.size())? true:false;
+		}
+	}
 
 /**
  * Your NestedIterator object will be instantiated and called as such:
