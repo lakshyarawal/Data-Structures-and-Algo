@@ -1,52 +1,43 @@
 class Solution {
-    public void solve(char[][] board) {
-        int n = board.length;
-        int m = board[0].length;
-        int i;
-        Queue<int[]> queue = new LinkedList<>();
-        for(i=0; i<n; i++){
-            for(int j=0; j<m; j++){
-                if(i == 0 || i == n-1 || j == 0 || j == m-1){
-                    if(board[i][j] == 'O'){
-                        queue.add(new int[]{i, j});
-                        board[i][j] = 'V';
+    public static class Point {
+        int x;
+        int y;
+        Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+    public static void solve(char[][] board) {
+        if (board == null || board.length == 0)
+            return;
+        int rows = board.length, columns = board[0].length;
+        int[][] direction = { { -1, 0 }, { 1, 0 }, { 0, 1 }, { 0, -1 } };
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < columns; j++) {
+                if ((i == 0 || i == rows - 1 || j == 0 || j == columns - 1) && board[i][j] == 'O') {
+                    Queue<Point> queue = new LinkedList<>();
+                    board[i][j] = 'B';
+                    queue.offer(new Point(i, j));
+                    while (!queue.isEmpty()) {
+                        Point point = queue.poll();
+                        for (int k = 0; k < 4; k++) {
+                            int x = direction[k][0] + point.x;
+                            int y = direction[k][1] + point.y;
+                            if (x >= 0 && x < rows && y >= 0 && y < columns && board[x][y] == 'O') {
+                                board[x][y] = 'B';
+                                queue.offer(new Point(x, y));
+                            }
+                        }
                     }
                 }
             }
-        }
-
-        while(!queue.isEmpty()){
-            int[] currPoint = queue.poll();
-            int x = currPoint[0];
-            int y = currPoint[1];
-
-            if(x-1 >= 0 && board[x-1][y] == 'O'){
-                queue.add(new int[]{x-1, y});
-                board[x-1][y] = 'V';
-            }
-            if(x+1 < n && board[x+1][y] == 'O'){
-                queue.add(new int[]{x+1, y});
-                board[x+1][y] = 'V';
-            }
-            if(y-1 >= 0 && board[x][y-1] == 'O'){
-                queue.add(new int[]{x, y-1});
-                board[x][y-1] = 'V';
-            }
-            if(y+1 < m && board[x][y+1] == 'O'){
-                queue.add(new int[]{x, y+1});
-                board[x][y+1] = 'V';
-            }
-        }
-
-        for(i=0; i<n; i++){
-            for(int j=0; j<m; j++){
-                if(board[i][j] == 'V'){
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < columns; j++) {
+                if (board[i][j] == 'B')
                     board[i][j] = 'O';
-                }
-                else{
+                else if (board[i][j] == 'O')
                     board[i][j] = 'X';
-                }
             }
-        }
+
     }
 }
