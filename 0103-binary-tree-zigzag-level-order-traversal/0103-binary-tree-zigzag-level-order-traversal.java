@@ -14,23 +14,38 @@
  * }
  */
 class Solution {
-    
-public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-    List<List<Integer>> res = new ArrayList();
-    travel(res, 0, root);
-    return res;
-}
-private void travel(List<List<Integer>> res, int level, TreeNode cur) {
-    if (cur == null) return;
-    if (res.size() <= level) {
-        res.add(new ArrayList<Integer>());
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> ans = new LinkedList();
+        if (root == null) {
+            return ans;
+        }
+        Queue<TreeNode> q = new LinkedList();
+        q.add(root);
+        int level = 1;
+        while (!q.isEmpty()) {
+            List<Integer> l = new ArrayList();
+            int c = q.size();
+            for (int i = 0; i < c; i++) {
+                TreeNode cur = q.poll();
+                l.add(cur.val);
+                if (cur.left != null) {
+                    q.add(cur.left);
+                }
+                if (cur.right != null) {
+                    q.add(cur.right);
+                }
+            }
+            if (level % 2 == 0) {
+                List<Integer> ll = new ArrayList();
+                for (int i = l.size() - 1; i >= 0; i--) {
+                    ll.add(l.get(i));
+                }
+                ans.add(ll);
+            } else {
+                ans.add(l);
+            }
+            level++;
+        }
+        return ans;
     }
-    if (level % 2 == 0) {
-        res.get(level).add(cur.val);
-    }   else {
-        res.get(level).add(0, cur.val);
-    }
-    travel(res, level + 1, cur.left);
-    travel(res, level + 1, cur.right);
-}
 }
