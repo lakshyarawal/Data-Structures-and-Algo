@@ -1,7 +1,7 @@
 class Solution {
     public boolean canVisitAllRooms(List<List<Integer>> rooms) {
         int n = rooms.size();
-        System.out.println("N: "+ n);
+        //System.out.println("N: "+ n);
         boolean[] visitedRoom = new boolean[n];
         Queue<Integer> roomsToVisit = new LinkedList<>();
         roomsToVisit.add(0);
