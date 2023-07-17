@@ -1,43 +1,49 @@
 class Solution {
-    public static class Point {
-        int x;
-        int y;
-        Point(int x, int y) {
-            this.x = x;
-            this.y = y;
+    public void solve(char[][] board) {
+        if(board == null || board.length == 0 ) return;
+        int m = board.length;
+        int n = board[0].length;
+        markBorders(board);
+        
+        for(int i = 0; i<m; i++){
+            for(int j = 0; j<n; j++){
+                if(board[i][j] == 'O') board[i][j] = 'X';
+                else if(board[i][j] == 'Y') board[i][j] = 'O';
+            }
         }
     }
-    public static void solve(char[][] board) {
-        if (board == null || board.length == 0)
-            return;
-        int rows = board.length, columns = board[0].length;
-        int[][] direction = { { -1, 0 }, { 1, 0 }, { 0, 1 }, { 0, -1 } };
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < columns; j++) {
-                if ((i == 0 || i == rows - 1 || j == 0 || j == columns - 1) && board[i][j] == 'O') {
-                    Queue<Point> queue = new LinkedList<>();
-                    board[i][j] = 'B';
-                    queue.offer(new Point(i, j));
-                    while (!queue.isEmpty()) {
-                        Point point = queue.poll();
-                        for (int k = 0; k < 4; k++) {
-                            int x = direction[k][0] + point.x;
-                            int y = direction[k][1] + point.y;
-                            if (x >= 0 && x < rows && y >= 0 && y < columns && board[x][y] == 'O') {
-                                board[x][y] = 'B';
-                                queue.offer(new Point(x, y));
-                            }
-                        }
-                    }
-                }
+    
+    public void markBorders(char[][] board){
+        int m = board.length;
+        int n = board[0].length;
+        
+        for(int j = 0; j<n; j++){
+            if(board[0][j] == 'O'){
+                markOtoY(board, 0, j);
             }
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < columns; j++) {
-                if (board[i][j] == 'B')
-                    board[i][j] = 'O';
-                else if (board[i][j] == 'O')
-                    board[i][j] = 'X';
+            if(board[m-1][j] == 'O'){
+                markOtoY(board, m-1, j);
             }
-
+        }
+        
+        for(int i = 0; i<m; i++){
+            if(board[i][0] == 'O'){
+                markOtoY(board, i, 0);
+            }
+            if(board[i][n-1] == 'O'){
+                markOtoY(board, i, n-1);
+            }
+        }
+    }
+    
+    public void markOtoY(char[][] board, int i, int j){
+        
+        if(i<0 || i>= board.length || j < 0 || j >= board[0].length || board[i][j]!='O') return;
+        
+        board[i][j] = 'Y';
+        markOtoY(board, i+1, j);
+        markOtoY(board, i-1, j);
+        markOtoY(board, i, j+1);
+        markOtoY(board, i, j-1);
     }
 }
