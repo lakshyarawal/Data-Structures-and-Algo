@@ -21,13 +21,10 @@ class Solution {
             dp[i][10] = res;
         }
     }
-    Solution() {
-        if(!alreadyDone) {
-            alreadyDone = true;
-            calculate();
-        }
-    }
+    
     public int knightDialer(int n) {
+        if(n==1) return 10;
+        calculate();
         return dp[n][10];
     }
 }
