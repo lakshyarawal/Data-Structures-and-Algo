@@ -1,36 +1,34 @@
 class Solution {
-    int count = 0;
     public int removeStones(int[][] stones) {
-        Map<String, String> parent = new HashMap<>();
-        count = stones.length;
-        // init Union Find
-        for (int[] stone : stones) {
-            String s = stone[0] + " " + stone[1];
-            parent.put(s, s);
+        boolean[] visited = new boolean[stones.length];
+        HashMap<Integer, List<Integer>> row = new HashMap<>();
+        HashMap<Integer, List<Integer>> col = new HashMap<>();
+        for (int i = 0; i < stones.length; i++){
+            row.computeIfAbsent(stones[i][0], o -> new ArrayList<>()).add(i); // so we can find other stones based on row
+            col.computeIfAbsent(stones[i][1], o -> new ArrayList<>()).add(i); // so we can find other stones based on col
         }
-        for (int[] s1 : stones) {
-            String ss1 = s1[0] + " " + s1[1];
-            for (int[] s2 : stones) {
-                if (s1[0] == s2[0] || s1[1] == s2[1]) { // in the same column or row
-                    String ss2 = s2[0] + " " + s2[1];
-                    union(parent, ss1, ss2);
-                }
+
+        int numOfIsland = 0;
+        for (int i = 0; i < stones.length; i++)
+            if (!visited[i]){
+                removeIsland(visited, stones, i, row, col);
+                numOfIsland++;
             }
-        }
-        return stones.length - count;
+
+        return stones.length - numOfIsland;
     }
-    private void union(Map<String, String> parent, String s1, String s2) {
-        String r1 = find(parent, s1), r2 = find(parent, s2);
-        if (r1.equals(r2)) {
-            return;
-        }
-        parent.put(r1, r2);
-        count--;
-    }
-    private String find(Map<String, String> parent, String s) {
-        if (!parent.get(s).equals(s)) {
-            parent.put(s, find(parent, parent.get(s)));
-        }
-        return parent.get(s);
+
+    private void removeIsland(boolean[] visited, int[][] stones, int idx,
+            Map<Integer, List<Integer>> row, Map<Integer, List<Integer>> col){
+        if (visited[idx]) return; // base case
+
+        visited[idx] = true; // mark as visited.
+        int r = stones[idx][0];
+        int c = stones[idx][1];
+        for (int index : row.get(r)) // not null because the current stone is in it
+            removeIsland(visited, stones, index, row, col); // visit all the stones on this row
+
+        for (int index : col.get(c))
+            removeIsland(visited, stones, index, row, col); // visit all the stones on this col
     }
 }
