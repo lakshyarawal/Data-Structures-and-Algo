@@ -1,39 +1,25 @@
 class Solution {
-    int ans;
+    // Ans = # of stones – # of islands
     public int removeStones(int[][] stones) {
-        int len = stones.length;
-        ans = len;
-        int[] parent = new int[len];
-        for (int i = 0; i < len; i++) parent[i] = i;
-        ans -= helper(0, stones,parent, len);
-        ans -= helper(1, stones,parent, len);
-        return len - ans;
-    }
-
-    public int find(int[] parent, int curindex){
-        int temp = curindex;
-        while (curindex != parent[curindex]){
-            curindex = parent[curindex];
-        }parent[temp] = curindex;
-        return curindex;
-    }
-
-    public int helper(int num, int[][] stones, int[] parent, int len){
-        int ans = 0;
-        HashMap<Integer, Integer> map = new HashMap<>();
-        for (int i = 0; i <len; i++){
-            int[] curCoor = stones[i];
-            if (map.containsKey(curCoor[num])){
-                int pindex = find(parent,map.get(curCoor[num]));
-                int cindex = find(parent, i);
-                if (pindex != cindex){
-                    parent[cindex] = parent[pindex];
-                    ans ++;
-                }
-            }else{
-                map.put(curCoor[num], i);
+        Set<int[]> visited = new HashSet();
+        int numOfIslands = 0;
+        for (int[] s1:stones){
+            if (!visited.contains(s1)){
+               dfs(s1, visited, stones); 
+               numOfIslands++;
             }
-        }return ans;
+        }
+        return stones.length - numOfIslands;
     }
-
+    
+    private void dfs(int[] s1, Set<int[]> visited, int[][] stones){
+        visited.add(s1);
+        for (int[] s2: stones){
+            if (!visited.contains(s2)){
+				// stone with same row or column. group them into island
+                if (s1[0] == s2[0] || s1[1] == s2[1])
+                    dfs(s2, visited, stones);
+            }
+        }
+    }
 }
