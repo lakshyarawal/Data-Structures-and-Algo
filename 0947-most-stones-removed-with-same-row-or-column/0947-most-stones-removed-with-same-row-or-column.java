@@ -1,21 +1,21 @@
 class Solution {
     public int removeStones(int[][] stones) {
-        boolean[] visited = new boolean[stones.length];
-        HashMap<Integer, List<Integer>> row = new HashMap<>();
-        HashMap<Integer, List<Integer>> col = new HashMap<>();
-        for (int i = 0; i < stones.length; i++){
-            row.computeIfAbsent(stones[i][0], o -> new ArrayList<>()).add(i); // so we can find other stones based on row
-            col.computeIfAbsent(stones[i][1], o -> new ArrayList<>()).add(i); // so we can find other stones based on col
+        int n = stones.length;
+        boolean[] visited = new boolean[n];
+        HashMap<Integer, List<Integer>> row = new HashMap<>() , col = new HashMap<>();
+        for (int i = 0; i < n; i++){
+            row.computeIfAbsent(stones[i][0], o -> new ArrayList<>()).add(i);
+            col.computeIfAbsent(stones[i][1], o -> new ArrayList<>()).add(i);
         }
 
         int numOfIsland = 0;
-        for (int i = 0; i < stones.length; i++)
+        for (int i = 0; i < n; i++)
             if (!visited[i]){
                 removeIsland(visited, stones, i, row, col);
                 numOfIsland++;
             }
 
-        return stones.length - numOfIsland;
+        return n - numOfIsland;
     }
 
     private void removeIsland(boolean[] visited, int[][] stones, int idx,
