@@ -1,4 +1,5 @@
 class Solution {
+    
     public String trim(String s){
         int i = 0;
         while(s.charAt(i) == ' '){
@@ -10,7 +11,10 @@ class Solution {
         }
         return s.substring(i, j+1);
     }
+    
     public String reverseWords(String s) {
+        if(s.length() == 1) return s;
+        
         Stack<String> stack = new Stack<>();
         StringBuilder sb = new StringBuilder();
         s = trim(s);
