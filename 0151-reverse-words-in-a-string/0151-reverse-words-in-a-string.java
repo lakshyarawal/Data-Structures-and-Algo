@@ -1,42 +1,50 @@
-class Solution {
+public class Solution {
+  
+  public String reverseWords(String s) {
+    if (s == null) return null;
     
-    public String trim(String s){
-        int i = 0;
-        while(s.charAt(i) == ' '){
-            i++;
-        }
-        int j = s.length()-1;
-        while(s.charAt(j) == ' '){
-            j--;
-        }
-        return s.substring(i, j+1);
-    }
+    char[] a = s.toCharArray();
+    int n = a.length;
     
-    public String reverseWords(String s) {
-        if(s.length() == 1) return s;
-        
-        Stack<String> stack = new Stack<>();
-        StringBuilder sb = new StringBuilder();
-        s = trim(s);
-        //System.out.println("S"+s+"E");
-        sb.append(s.charAt(0));
-        for(int i = 1; i < s.length(); i++){
-            if(s.charAt(i) == ' ' && s.charAt(i-1) == ' '){
-                continue;
-            }
-            else if(s.charAt(i) == ' '){
-                stack.add(sb.toString());
-                sb = new StringBuilder();
-            } else{
-                sb.append(s.charAt(i));
-            }
-        }
-        stack.add(sb.toString());
-        StringBuilder res = new StringBuilder();
-        while(!stack.isEmpty()){
-            res.append(stack.pop());
-            if(!stack.isEmpty()) res.append(" ");
-        }
-        return res.toString();
+    // step 1. reverse the whole string
+    reverse(a, 0, n - 1);
+    // step 2. reverse each word
+    reverseWords(a, n);
+    // step 3. clean up spaces
+    return cleanSpaces(a, n);
+  }
+  
+  void reverseWords(char[] a, int n) {
+    int i = 0, j = 0;
+      
+    while (i < n) {
+      while (i < j || i < n && a[i] == ' ') i++; // skip spaces
+      while (j < i || j < n && a[j] != ' ') j++; // skip non spaces
+      reverse(a, i, j - 1);                      // reverse the word
     }
+  }
+  
+  // trim leading, trailing and multiple spaces
+  String cleanSpaces(char[] a, int n) {
+    int i = 0, j = 0;
+      
+    while (j < n) {
+      while (j < n && a[j] == ' ') j++;             // skip spaces
+      while (j < n && a[j] != ' ') a[i++] = a[j++]; // keep non spaces
+      while (j < n && a[j] == ' ') j++;             // skip spaces
+      if (j < n) a[i++] = ' ';                      // keep only one space
+    }
+  
+    return new String(a).substring(0, i);
+  }
+  
+  // reverse a[] from a[i] to a[j]
+  private void reverse(char[] a, int i, int j) {
+    while (i < j) {
+      char t = a[i];
+      a[i++] = a[j];
+      a[j--] = t;
+    }
+  }
+  
 }
