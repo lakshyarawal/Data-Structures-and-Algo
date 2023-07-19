@@ -1,25 +1,34 @@
 class Solution {
-    // Ans = # of stones – # of islands
     public int removeStones(int[][] stones) {
-        Set<int[]> visited = new HashSet();
-        int numOfIslands = 0;
-        for (int[] s1:stones){
-            if (!visited.contains(s1)){
-               dfs(s1, visited, stones); 
-               numOfIslands++;
-            }
+        boolean[] visited = new boolean[stones.length];
+        HashMap<Integer, List<Integer>> row = new HashMap<>();
+        HashMap<Integer, List<Integer>> col = new HashMap<>();
+        for (int i = 0; i < stones.length; i++){
+            row.computeIfAbsent(stones[i][0], o -> new ArrayList<>()).add(i); // so we can find other stones based on row
+            col.computeIfAbsent(stones[i][1], o -> new ArrayList<>()).add(i); // so we can find other stones based on col
         }
-        return stones.length - numOfIslands;
+
+        int numOfIsland = 0;
+        for (int i = 0; i < stones.length; i++)
+            if (!visited[i]){
+                removeIsland(visited, stones, i, row, col);
+                numOfIsland++;
+            }
+
+        return stones.length - numOfIsland;
     }
-    
-    private void dfs(int[] s1, Set<int[]> visited, int[][] stones){
-        visited.add(s1);
-        for (int[] s2: stones){
-            if (!visited.contains(s2)){
-				// stone with same row or column. group them into island
-                if (s1[0] == s2[0] || s1[1] == s2[1])
-                    dfs(s2, visited, stones);
-            }
-        }
+
+    private void removeIsland(boolean[] visited, int[][] stones, int idx,
+            Map<Integer, List<Integer>> row, Map<Integer, List<Integer>> col){
+        if (visited[idx]) return; // base case
+
+        visited[idx] = true; // mark as visited.
+        int r = stones[idx][0];
+        int c = stones[idx][1];
+        for (int index : row.get(r)) // not null because the current stone is in it
+            removeIsland(visited, stones, index, row, col); // visit all the stones on this row
+
+        for (int index : col.get(c))
+            removeIsland(visited, stones, index, row, col); // visit all the stones on this col
     }
 }
