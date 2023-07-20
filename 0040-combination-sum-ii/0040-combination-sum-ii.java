@@ -1,6 +1,6 @@
 class Solution {
     
-    public void recSum(int target, HashSet<List<Integer>> res, List<Integer> curr, int[] candidates, int start){
+    public void recSum(int target, List<List<Integer>> res, List<Integer> curr, int[] candidates, int start){
         if(start == candidates.length && target != 0)return;
         if(target == 0){
             res.add(new ArrayList<>(curr));
@@ -17,10 +17,10 @@ class Solution {
     
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         Arrays.sort(candidates);
-        HashSet<List<Integer>> res = new HashSet<>();
+        List<List<Integer>> res = new ArrayList<>();
         recSum(target, res, new ArrayList<>(), candidates, 0);
-        List<List<Integer>> list = new ArrayList<>();
-        list.addAll(res);
-        return list;
+        // List<List<Integer>> list = new ArrayList<>();
+        // list.addAll(res);
+        return res;
     }
 }
