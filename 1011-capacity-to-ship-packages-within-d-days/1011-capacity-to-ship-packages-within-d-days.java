@@ -6,18 +6,16 @@ class Solution {
             lo = Math.max(lo, w);
             hi += w;
         }
-        int ans = hi;
         while(lo<=hi){
             int mid = lo + (hi-lo)/2;
             if(check(weights, days, mid)){
-                ans = mid;
                 hi = mid -1;
             }
             else{
                 lo = mid + 1;
             }
         }
-        return ans;
+        return lo;
     }
     
     public boolean check(int[] weights, int days, int mid){
