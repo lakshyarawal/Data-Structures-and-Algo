@@ -15,22 +15,19 @@
  */
 class Solution {
 
-    public void flatten(TreeNode root) {
-        if(root == null) return;
-        Deque<TreeNode> q = new ArrayDeque<>();
-        TreeNode dummyNode = new TreeNode(-1);
-        dummyNode.right = root;
-        q.add(root);
-        TreeNode prev = dummyNode;
-        while(!q.isEmpty()){
-            TreeNode curr = q.pollFirst();
-            prev.right = curr;
-            prev.left = null;
-            if(curr.right != null) q.addFirst(curr.right);
-            if(curr.left != null) q.addFirst(curr.left);
-            prev = curr;
+   public void flatten(TreeNode root) {
+        if (root == null) return;
+        Stack<TreeNode> stk = new Stack<TreeNode>();
+        stk.push(root);
+        while (!stk.isEmpty()){
+            TreeNode curr = stk.pop();
+            if (curr.right!=null)  
+                 stk.push(curr.right);
+            if (curr.left!=null)  
+                 stk.push(curr.left);
+            if (!stk.isEmpty()) 
+                 curr.right = stk.peek();
+            curr.left = null;  // dont forget this!! 
         }
-        
-        root = dummyNode.right;
     }
 }
