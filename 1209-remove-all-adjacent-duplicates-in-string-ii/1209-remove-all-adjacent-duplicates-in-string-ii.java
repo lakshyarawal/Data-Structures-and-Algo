@@ -5,11 +5,7 @@ class Solution {
         Stack<Pair<Character, Integer>> d = new Stack<>();
         StringBuilder sb = new StringBuilder();
         
-        d.push(new Pair(s.charAt(0), 1));
-        
-        for(int i = 1; i < s.length(); i++){
-            char c = s.charAt(i);
-            
+        for(char c: s.toCharArray()){
             if(!d.isEmpty() && c == d.peek().getKey()){
                 if(d.peek().getValue() == k-1) d.pop();
                 else d.push(new Pair(c, d.pop().getValue()+1));
