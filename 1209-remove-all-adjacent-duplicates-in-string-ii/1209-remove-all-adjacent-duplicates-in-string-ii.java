@@ -11,19 +11,10 @@ class Solution {
             char c = s.charAt(i);
             
             if(!d.isEmpty() && c == d.peek().getKey()){
-                if(d.peek().getValue() == k-1){
-                    //System.out.println("Popping " + d.peek().getKey());
-                    d.pop();
-                }else{
-                    Pair<Character, Integer> curr = d.pop();
-                    //System.out.println("Adding "+ curr.getKey() + " VALUE: "+curr.getValue()+1);
-                    d.push(new Pair(curr.getKey(), curr.getValue()+1));
-                }
-                
+                if(d.peek().getValue() == k-1) d.pop();
+                else d.push(new Pair(c, d.pop().getValue()+1));
             }
-            else{
-                d.push(new Pair(c, 1));
-            }
+            else d.push(new Pair(c, 1));
         }
         
         while(!d.isEmpty()){
