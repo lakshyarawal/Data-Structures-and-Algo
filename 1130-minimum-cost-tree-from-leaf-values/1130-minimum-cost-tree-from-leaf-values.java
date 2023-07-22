@@ -1,43 +1,34 @@
 class Solution {
-
-    public pair helper(int[] arr, int start, int end, pair dp[][]){
-        if(start > end){
-            return new pair(0, 100000);
-        }
-        if(start == end){
-            return new pair(arr[start], 0);
-        }
-        if(dp[start][end] != null){
-            return dp[start][end];
-        }
-        pair ans = new pair(0, 1000000);
-        for(int i = start; i<end; i++){
-            pair pairLeft = helper(arr, start, i, dp);
-            pair pairRight = helper(arr, i+1, end, dp);
-            int total = pairLeft.totalSum + pairRight.totalSum + (pairLeft.maxVal*pairRight.maxVal);
-            if(total < ans.totalSum){
-                ans.totalSum = total;
-                ans.maxVal = Math.max(pairLeft.maxVal, pairRight.maxVal);
-            }
-        }
-        dp[start][end] = ans;
-        return ans;
-    }
-
+    int sum=0;
     public int mctFromLeafValues(int[] arr) {
-        int l = arr.length;
-        if(l == 2){
-            return arr[0] * arr[1];
-        }
-        return helper(arr, 0, l-1, new pair[l][l]).totalSum;   
+
+        minSum(arr, 0, arr.length-1);
+        return sum;
     }
 
-    class pair{
-        int totalSum;
-        int maxVal;
-        pair(int maxVal, int totalSum){
-            this.totalSum =  totalSum;
-            this.maxVal = maxVal;
+    int minSum( int[] arr, int i, int j ){
+        if(i>j || i>arr.length || j<0)
+            return 0;
+
+        if( i == j-1){
+            sum += arr[i]*arr[j];
+            return Math.max( arr[i], arr[j]);
         }
+
+        if( i==j) return arr[i];
+
+        int maxIndex = i;
+        for(int k=i; k<=j; k++){
+            if(arr[k]> arr[maxIndex])
+                maxIndex = k;
+        }
+
+        int maxLeft = minSum(arr, i, maxIndex-1);
+        int maxRight = minSum(arr, maxIndex +1, j);
+
+        sum += maxLeft*arr[maxIndex];
+        sum += maxRight*arr[maxIndex];
+
+        return arr[maxIndex];
     }
 }
