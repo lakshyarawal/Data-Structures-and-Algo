@@ -11,8 +11,7 @@ class Solution {
     }
     public List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> ret = new ArrayList<List<Integer>>();
-        List<Integer> sub = new ArrayList<Integer>();
-        dfs(nums, 0, ret, sub);
+        dfs(nums, 0, ret, new ArrayList<Integer>());
         return ret;
     }
 }
