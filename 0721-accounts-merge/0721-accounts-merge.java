@@ -1,14 +1,12 @@
 class Solution {
     class DisjointSet{
-        int[] rank, parent, size;
+        int[] rank, parent;
         public DisjointSet(int n){
             rank = new int[n];
             parent = new int[n];
-            size = new int[n];
             for(int i = 0; i< n; i++){
                 parent[i] = i;
                 rank[i] = 0;
-                size[i] = 1;
             }
         } 
         public int getParent(int u){
@@ -68,12 +66,9 @@ class Solution {
             if(res[i].size() == 0){
                 continue;
             }
-            List<String> res2 = new ArrayList<>();
             Collections.sort(res[i]);
-            res2.add(accounts.get(i).get(0));
-            for(String E: res[i])
-                res2.add(E);
-            list.add(res2);
+            res[i].add(0, accounts.get(i).get(0));
+            list.add(res[i]);
         }
         return list;
 
