@@ -40,6 +40,7 @@ class Solution {
         }
         return -1;
     }
+    
     private void dfs(int[][] A, boolean[][] visited, Queue<int[]> q, int i, int j, int[][] dirs) {
         if (i < 0 || j < 0 || i >= A.length || j >= A[0].length || visited[i][j] || A[i][j] == 0) {
             return;
