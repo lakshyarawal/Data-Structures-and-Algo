@@ -1,34 +1,102 @@
 class Solution {
-    public List<List<String>> accountsMerge(List<List<String>> acts) {
-        Map<String, String> owner = new HashMap<>();
-        Map<String, String> parents = new HashMap<>();
-        Map<String, TreeSet<String>> unions = new HashMap<>();
-        for (List<String> a : acts) {
-            for (int i = 1; i < a.size(); i++) {
-                parents.put(a.get(i), a.get(i));
-                owner.put(a.get(i), a.get(0));
+    class DisjointSet{
+        int[] rank, parent, size;
+        public DisjointSet(int n){
+            rank = new int[n];
+            parent = new int[n];
+            size = new int[n];
+            for(int i = 0; i< n; i++){
+                parent[i] = i;
+                rank[i] = 0;
+                size[i] = 1;
+            }
+        } 
+        public int getParent(int u){
+            if(parent[u] == u){
+                return u;
+            }
+            return parent[u] = getParent(parent[u]);
+        } 
+        public void unionByRank(int u, int v){
+            int uP_u = getParent(u);
+            int uP_v = getParent(v);
+            if(uP_u == uP_v){
+                return;
+            }
+            if(rank[uP_u] > rank[uP_v]){
+                parent[uP_v] = uP_u;
+            }
+            else if(rank[uP_u] < rank[uP_v]){
+                parent[uP_u] = uP_v;
+            }
+            else{
+                parent[uP_u] = uP_v;
+                rank[uP_v] += 1;
+            }
+        } 
+
+        public void unionBySize(int u, int v){
+            int uP_u = getParent(u);
+            int uP_v = getParent(v);
+            if(uP_u == uP_v){
+                return;
+            }
+            if(rank[uP_u] > rank[uP_v]){
+                parent[uP_v] = uP_u;
+                size[uP_u] += size[uP_v];
+            }
+            else{
+                parent[uP_u] = uP_v;
+                size[uP_v] += size[uP_u];
+            }
+        } 
+    }
+    public List<List<String>> accountsMerge(List<List<String>> accounts) {
+        int n = accounts.size();
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        DisjointSet ds = new DisjointSet(n);
+        for(int i = 0; i< accounts.size();i++){
+            for(int j = 1; j< accounts.get(i).size(); j++){
+                if(hashMap.containsKey(accounts.get(i).get(j))){
+                    ds.unionByRank(hashMap.get(accounts.get(i).get(j)), i);
+                }
+                else{
+                    hashMap.put(accounts.get(i).get(j), i);
+                }
             }
         }
-        for (List<String> a : acts) {
-            String p = find(a.get(1), parents);
-            for (int i = 2; i < a.size(); i++)
-                parents.put(find(a.get(i), parents), p);
+
+        ArrayList<String> res[] = new ArrayList[n];
+        for(int i = 0; i< n; i++){
+            res[i] = new ArrayList<>();
         }
-        for(List<String> a : acts) {
-            String p = find(a.get(1), parents);
-            if (!unions.containsKey(p)) unions.put(p, new TreeSet<>());
-            for (int i = 1; i < a.size(); i++)
-                unions.get(p).add(a.get(i));
+        for(Map.Entry<String, Integer> e: hashMap.entrySet()){
+            int uTP = ds.getParent(e.getValue());
+            res[uTP].add(e.getKey());
         }
-        List<List<String>> res = new ArrayList<>();
-        for (String p : unions.keySet()) {
-            List<String> emails = new ArrayList(unions.get(p));
-            emails.add(0, owner.get(p));
-            res.add(emails);
+
+        List<List<String>> list = new ArrayList<>();
+        
+        for(int i = 0; i< n; i++){
+            if(res[i].size() == 0){
+                continue;
+            }
+            List<String> res2 = new ArrayList<>();
+            Collections.sort(res[i]);
+            res2.add(accounts.get(i).get(0));
+            for(String E: res[i])
+                res2.add(E);
+            list.add(res2);
         }
-        return res;
-    }
-    private String find(String s, Map<String, String> p) {
-        return p.get(s) == s ? s : find(p.get(s), p);
+        // System.out.println(hashMap);
+        return list;
+
+
+
+
+
+
+
+
     }
 }
