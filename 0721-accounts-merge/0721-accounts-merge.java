@@ -51,6 +51,8 @@ class Solution {
             }
         } 
     }
+    
+    
     public List<List<String>> accountsMerge(List<List<String>> accounts) {
         int n = accounts.size();
         HashMap<String, Integer> hashMap = new HashMap<>();
@@ -88,15 +90,7 @@ class Solution {
                 res2.add(E);
             list.add(res2);
         }
-        // System.out.println(hashMap);
         return list;
-
-
-
-
-
-
-
 
     }
 }
