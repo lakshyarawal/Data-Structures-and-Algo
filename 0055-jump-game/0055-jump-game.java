@@ -7,6 +7,7 @@ class Solution {
         for(int i = 0; i < n; i++){
             if(dp[i] != 1) continue;
             for(int j = i; j <= i + nums[i] && j < n; j++){
+                if(j == n-1) return true;
                 dp[j] = 1;
             }
         }
