@@ -35,21 +35,6 @@ class Solution {
             }
         } 
 
-//         public void unionBySize(int u, int v){
-//             int uP_u = getParent(u);
-//             int uP_v = getParent(v);
-//             if(uP_u == uP_v){
-//                 return;
-//             }
-//             if(rank[uP_u] > rank[uP_v]){
-//                 parent[uP_v] = uP_u;
-//                 size[uP_u] += size[uP_v];
-//             }
-//             else{
-//                 parent[uP_u] = uP_v;
-//                 size[uP_v] += size[uP_u];
-//             }
-//         } 
     }
     
     
