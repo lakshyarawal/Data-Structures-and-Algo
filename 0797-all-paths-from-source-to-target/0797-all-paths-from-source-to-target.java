@@ -3,7 +3,7 @@ class Solution {
     private int[][] graph;
     private HashMap<Integer, List<List<Integer>>> memo;
 
-    protected List<List<Integer>> allPathsToTarget(int currNode) {
+    public List<List<Integer>> allPathsToTarget(int currNode) {
         // memoization. check the result in the cache first
         if (memo.containsKey(currNode))
             return memo.get(currNode);
@@ -36,6 +36,6 @@ class Solution {
         this.graph = graph;
         this.memo = new HashMap<>();
 
-        return this.allPathsToTarget(0);
+        return allPathsToTarget(0);
     }
 }
