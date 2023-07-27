@@ -1,60 +1,36 @@
 class Solution {
     public int[] restoreArray(int[][] adjacentPairs) {
-        HashMap<Integer, Integer> countMap = new HashMap<>();
-        HashMap<Integer, List<Integer>> neighbors = new HashMap<>();
-        Set<Integer> addedElements = new HashSet<>();
-        
-        PriorityQueue<Pair<Integer, Integer>> pq = new PriorityQueue<>((a, b) -> a.getValue()-b.getValue());
-        
-        
-        for(int i = 0; i < adjacentPairs.length; i++){
-            if(countMap.containsKey(adjacentPairs[i][0])){
-                countMap.put(adjacentPairs[i][0],  2);
-                List<Integer> l = neighbors.get(adjacentPairs[i][0]);
-                l.add(adjacentPairs[i][1]);
-                neighbors.put(adjacentPairs[i][0], l); 
-            }else {
-                countMap.put(adjacentPairs[i][0], 1);
-                List<Integer> l = new ArrayList<>();
-                l.add(adjacentPairs[i][1]);
-                neighbors.put(adjacentPairs[i][0], l); 
-            }
-            if(countMap.containsKey(adjacentPairs[i][1])){
-                countMap.put(adjacentPairs[i][1],  2);
-                List<Integer> l = neighbors.get(adjacentPairs[i][1]);
-                l.add(adjacentPairs[i][0]);
-                neighbors.put(adjacentPairs[i][1], l); 
-            }else {
-                countMap.put(adjacentPairs[i][1], 1);
-                List<Integer> l = new ArrayList<>();
-                l.add(adjacentPairs[i][0]);
-                neighbors.put(adjacentPairs[i][1], l); 
+        Map<Integer, List<Integer>> neighbors = new HashMap<>();
+        for (int[] pair : adjacentPairs) {
+            neighbors.computeIfAbsent(pair[0], k -> new ArrayList<>()).add(pair[1]);
+            neighbors.computeIfAbsent(pair[1], k -> new ArrayList<>()).add(pair[0]);
+        }
+
+        int[] result = new int[adjacentPairs.length + 1];
+        Set<Integer> visited = new HashSet<>();
+        int start = 0;
+
+        for (Map.Entry<Integer, List<Integer>> entry : neighbors.entrySet()) {
+            if (entry.getValue().size() == 1) {
+                start = entry.getKey();
+                break;
             }
         }
-        
-        for(Map.Entry<Integer, Integer> e : countMap.entrySet()){
-            pq.add(new Pair(e.getKey(), e.getValue()));
-        }
-        
-        int i = 0;
-        int[] res = new int[adjacentPairs.length+1];
-        int prev = pq.remove().getKey();
-        addedElements.add(prev);
-        while(i < adjacentPairs.length+1){
-            res[i] = prev;
-            //System.out.println("res: "+ Arrays.toString(res));
-            List<Integer> newPrev = neighbors.get(prev);
-            //System.out.println("new Prev: "+ newPrev);
-            for(int el : newPrev){
-                //System.out.println("Elements: "+ el);
-                if(!addedElements.contains(el)){
-                    addedElements.add(el);
-                    prev = el;
+
+        int index = 0;
+        int prev = start;
+
+        while (index < result.length) {
+            result[index++] = prev;
+            visited.add(prev);
+            for (int neighbor : neighbors.get(prev)) {
+                if (!visited.contains(neighbor)) {
+                    prev = neighbor;
                     break;
                 }
             }
-            i++;
         }
-        return res;
+
+        return result;
     }
 }
