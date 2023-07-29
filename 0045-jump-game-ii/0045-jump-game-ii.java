@@ -1,17 +1,14 @@
 class Solution {
     public int jump(int[] nums) {
-    int n = nums.length;
-	 if(n<2)return 0;
-	 int level=0,currentMax=0,i=0,nextMax=0;
-
-	 while(currentMax-i+1>0){		//nodes count of current level>0
-		 level++;
-		 for(;i<=currentMax;i++){	//traverse current level , and update the max reach of next level
-			nextMax=Math.max(nextMax,nums[i]+i);
-			if(nextMax>=n-1)return level;   // if last element is in level+1,  then the min jump=level 
-		 }
-		 currentMax=nextMax;
-	 }
-	 return 0;
- }
+        int jumps = 0, farthest = 0;
+        int left = 0, right = 0;
+        while (right < nums.length - 1) {
+            for (int i = left; i <= right; ++i)
+                farthest = Math.max(farthest, i + nums[i]);
+            left = right + 1;
+            right = farthest;
+            ++jumps;
+        }
+        return jumps;
+    }
 }
