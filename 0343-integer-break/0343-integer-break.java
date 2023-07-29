@@ -2,14 +2,14 @@ class Solution {
     public int integerBreak(int n) {
         int[] dp = new int[n+1];
         dp[1] = 1;
-        for(int i = 1; i < n+1; i++){
-            for(int j = 1; j < i; j++){
-                int a = (i-j) * j;
-                int b = dp[i-j] * j;
-                int c = dp[i];
-                dp[i] = Math.max(a, Math.max(b, c));
+        for(int num = 2; num < n+1; num++){
+            dp[num] = (num == n) ? 0 : num;
+            for(int i = 1; i < num; i++){
+                int val = dp[i] * dp[num-i];
+                dp[num] = Math.max(dp[num], val);
             }
         }
+        //System.out.println(Arrays.toString(dp));
         return dp[n];
     }
 }
