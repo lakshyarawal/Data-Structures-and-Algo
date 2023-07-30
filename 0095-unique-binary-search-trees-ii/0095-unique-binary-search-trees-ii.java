@@ -1,6 +1,6 @@
 class Solution {
     public List<TreeNode> allPossibleBST(int start, int end,
-            Map<Pair<Integer, Integer>, List<TreeNode>> memo) {
+        Map<Pair<Integer, Integer>, List<TreeNode>> memo) {
         List<TreeNode> res = new ArrayList<>();
         if (start > end) {
             res.add(null);
