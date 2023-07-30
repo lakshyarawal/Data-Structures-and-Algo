@@ -16,13 +16,14 @@ import java.util.LinkedList;
  * }
  */
 class Solution {
-    public int count = 0;
+    public int COUNT = 0;
+    
     public int goodNodes(TreeNode root) {
         isGood(root, root.val);
-        return count;
+        return COUNT;
     }
     public void isGood(TreeNode node, int max_val){
-        if (node.val >= max_val) count++;
+        if (node.val >= max_val) COUNT++;
         max_val = Math.max(max_val, node.val);
         if(node.left != null) isGood(node.left, max_val);
         if(node.right != null) isGood(node.right, max_val);
