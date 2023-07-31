@@ -1,36 +1,44 @@
 class TimeMap {
-    HashMap<String, ArrayList<Pair<Integer, String>>> keyTimeMap;
+    class entry implements Comparable<entry> {
+        int time;
+        String value;
+
+        public entry(String val, int time) {
+            this.time = time;
+            this.value = val;
+        }
+
+        @Override
+        public int compareTo(entry e) {
+            return e.time - this.time;
+        }
+    }
+
+    
+    HashMap<String, List<entry>> timeValueMap;
     
     public TimeMap() {
-        keyTimeMap = new HashMap();
+        timeValueMap = new HashMap<>();
+        
     }
     
     public void set(String key, String value, int timestamp) {
-        if (!keyTimeMap.containsKey(key)) {
-            keyTimeMap.put(key, new ArrayList());
+        if(!timeValueMap.containsKey(key)){
+            timeValueMap.put(key, new ArrayList<entry>());
         }
-        
-        // Store '(timestamp, value)' pair in 'key' bucket.
-        keyTimeMap.get(key).add(new Pair(timestamp, value));
+        timeValueMap.get(key).add(new entry(value, timestamp));
     }
     
     public String get(String key, int timestamp) {
-        // If the 'key' does not exist in map we will return empty string.
-        if (!keyTimeMap.containsKey(key)) {
+        if(!timeValueMap.containsKey(key) || timeValueMap.get(key).get(0).time > timestamp){
             return "";
         }
-        
-        if (timestamp < keyTimeMap.get(key).get(0).getKey()) {
-            return "";
-        }
-        
-        // Using binary search on the list of pairs.
         int left = 0;
-        int right = keyTimeMap.get(key).size();
+        int right = timeValueMap.get(key).size();
         
         while (left < right) {
             int mid = (left + right) / 2;
-            if (keyTimeMap.get(key).get(mid).getKey() <= timestamp) {
+            if (timeValueMap.get(key).get(mid).time <= timestamp) {
                 left = mid + 1;
             } else {
                 right = mid;
@@ -42,6 +50,13 @@ class TimeMap {
             return "";
         }
                 
-        return keyTimeMap.get(key).get(right - 1).getValue();
+        return timeValueMap.get(key).get(right - 1).value;
     }
 }
+
+/**
+ * Your TimeMap object will be instantiated and called as such:
+ * TimeMap obj = new TimeMap();
+ * obj.set(key,value,timestamp);
+ * String param_2 = obj.get(key,timestamp);
+ */
