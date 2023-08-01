@@ -5,7 +5,7 @@ class Solution {
         StringBuilder sb = new StringBuilder();
         //System.out.println(vals[0]);
         int i = 0;
-        while(num > 0 && i < 13){
+        while(num > 0){
 
             while(num - vals[i] >= 0){
                 num = num - vals[i];
