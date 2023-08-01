@@ -23,8 +23,10 @@ class Solution {
             int pNode2 = find(node2);
             if (rank[pNode1] > rank[pNode2]) {
                 parent[pNode2] = pNode1;
+                rank[pNode1]++; 
             } else if (rank[pNode1] < rank[pNode2]) {
                 parent[pNode1] = pNode2;
+                rank[pNode2]++; 
             } else {
                 parent[pNode2] = pNode1;
                 rank[pNode1]++; // Increment rank of pNode1
