@@ -8,44 +8,54 @@
  * }
  */
 class Solution {
-    static ArrayList<TreeNode> ntrp;
-    public static boolean nodeToRootPath(TreeNode node,int target){
-        if(node==null) return false;
-        if(node.val==target){
-            ntrp.add(node);
-            return true;
-        }
-        boolean left=nodeToRootPath(node.left,target);
-        if(left==true){
-            ntrp.add(node);
-            return true;
-        }
-        boolean right=nodeToRootPath(node.right,target);
-        if(right==true){
-            ntrp.add(node);
-            return true;
-        }
-        return false;
-    }
-    public void kleveldown(TreeNode node,int k,int curr,TreeNode blocker,List<Integer> ans){
-        if(node==null) return;
-        if(node==blocker) return;
-        if(curr==k){ ans.add(node.val);  return; }
-        kleveldown(node.left,k,curr+1,blocker,ans);
-        kleveldown(node.right,k,curr+1,blocker,ans);
-    }
-    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
-        ntrp=new ArrayList<>();
-        nodeToRootPath(root,target.val);
-        List<Integer> ans=new ArrayList<>();
-        for(int i=0;i<ntrp.size();i++){
-            //  nodes k-i level down from ith node
-            if(i==0){
-              kleveldown(ntrp.get(i),k-i,0,null,ans);   
-            }else{
-              kleveldown(ntrp.get(i),k-i,0,ntrp.get(i-1),ans);  
+    private void markParents(TreeNode root, Map<TreeNode, TreeNode> parent_track, TreeNode target) {
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.offer(root);
+        while(!queue.isEmpty()) { 
+            TreeNode current = queue.poll(); 
+            if(current.left != null) {
+                parent_track.put(current.left, current);
+                queue.offer(current.left);
+            }
+            if(current.right != null) {
+                parent_track.put(current.right, current);
+                queue.offer(current.right);
             }
         }
-        return ans;
+    }
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        Map<TreeNode, TreeNode> parent_track = new HashMap<>();
+        markParents(root, parent_track, root); 
+        Map<TreeNode, Boolean> visited = new HashMap<>(); 
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.offer(target);
+        visited.put(target, true);
+        int curr_level = 0;
+        while(!queue.isEmpty()) { /*Second BFS to go upto K level from target node and using our hashtable info*/
+            int size = queue.size();
+            if(curr_level == k) break;
+            curr_level++;
+            for(int i=0; i<size; i++) {
+                TreeNode current = queue.poll(); 
+                if(current.left != null && visited.get(current.left) == null) {
+                    queue.offer(current.left);
+                    visited.put(current.left, true);
+                }
+                if(current.right != null && visited.get(current.right) == null ) {
+                    queue.offer(current.right);
+                    visited.put(current.right, true);
+                }
+                if(parent_track.get(current) != null && visited.get(parent_track.get(current)) == null) {
+                    queue.offer(parent_track.get(current));
+                    visited.put(parent_track.get(current), true);
+                }
+            }
+        }
+        List<Integer> result = new ArrayList<>(); 
+        while(!queue.isEmpty()) {
+            TreeNode current = queue.poll(); 
+            result.add(current.val);
+        }
+        return result;
     }
 }
