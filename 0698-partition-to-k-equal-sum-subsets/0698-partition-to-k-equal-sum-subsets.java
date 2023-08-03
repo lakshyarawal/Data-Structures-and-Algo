@@ -1,29 +1,31 @@
 class Solution {
-int sum;
-public boolean solve(int nums[],int target,int index,int[] sums){
-    if(index==nums.length){
-        for(int i=1;i<sums.length;i++){
-            if(sums[i] != sums[i-1]) return false;
-        }
+  public boolean canPartitionKSubsets(int[] nums, int k) {
+    final int sum = Arrays.stream(nums).sum();
+    if (sum % k != 0)
+      return false;
+
+    final int t = sum / k; // Each subset's target sum
+    boolean[] seen = new boolean[nums.length];
+    return dfs(nums, 0, k, t, t, seen);
+  }
+
+  private boolean dfs(int[] nums, int s, int k, int target, int subsetTargetSum, boolean[] seen) {
+    if (k == 0)
+      return true;
+    if (target < 0)
+      return false;
+    if (target == 0)
+      return dfs(nums, 0, k - 1, subsetTargetSum, subsetTargetSum, seen);
+
+    for (int i = s; i < nums.length; ++i) {
+      if (seen[i])
+        continue;
+      seen[i] = true;
+      if (dfs(nums, i + 1, k, target - nums[i], subsetTargetSum, seen))
         return true;
+      seen[i] = false;
     }
-    for(int j=0;j<sums.length;j++){
-        if(sums[j]+nums[index]<=target){
-            sums[j]+=nums[index];
-            if(solve(nums,target,index+1,sums)) return true;
-            sums[j]-=nums[index];
-        }
-        if(sums[j]==0) return false;
-    }
+
     return false;
-}
-public boolean canPartitionKSubsets(int[] nums, int k) {
-    sum=0;
-    for(int num:nums){
-        sum+=num;
-    }
-    if(sum%k!=0 || nums.length<k) return false;
-    Arrays.sort(nums);
-    return solve(nums,sum/k,0,new int[k]);
-}
+  }
 }
