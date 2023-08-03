@@ -32,9 +32,7 @@ class Solution {
 
             if (rank[idx1] >= rank[idx2]) {
                 parent[idx2] = pNode1;
-                if (rank[idx1] == rank[idx2]) {
-                    rank[idx1]++;
-                }
+                rank[idx1]++;
             } else {
                 parent[idx1] = pNode2;
             }
