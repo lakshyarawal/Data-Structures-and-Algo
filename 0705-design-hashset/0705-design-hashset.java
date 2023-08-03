@@ -1,19 +1,23 @@
+import java.util.Random;
 class MyHashSet {
     int[] set;
+    int MOD;
     public MyHashSet() {
-        set = new int[10000000];
+        Random random = new Random();
+        set = new int[1000000];
+        MOD = random.nextInt(1000000);
     }
     
     public void add(int key) {
-        set[key] = 1;
+        set[key%MOD] = 1;
     }
     
     public void remove(int key) {
-        set[key] = 0;
+        set[key%MOD] = 0;
     }
     
     public boolean contains(int key) {
-        return set[key] != 0;
+        return set[key%MOD] != 0;
     }
 }
 
