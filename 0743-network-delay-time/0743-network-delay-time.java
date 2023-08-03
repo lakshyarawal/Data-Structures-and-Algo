@@ -21,7 +21,7 @@ class Solution {
                 }
             }
         }
-        //System.out.println(Arrays.toString(minTime));
+
         int time = 0;
         for(int i = 0; i < n; i++){
             if(minTime[i] == Integer.MAX_VALUE)return -1;
