@@ -1,15 +1,15 @@
 class Solution {
     public int maxEvents(int[][] events) {
-        PriorityQueue<Integer> pq = new PriorityQueue<Integer>();
+        PriorityQueue<Integer> endDates = new PriorityQueue<Integer>();
         Arrays.sort(events, (a, b) -> Integer.compare(a[0], b[0]));
         int i = 0, res = 0, n = events.length;
-        for (int d = 1; d <= 100000; ++d) {
-            while (!pq.isEmpty() && pq.peek() < d)
-                pq.poll();
-            while (i < n && events[i][0] == d)
-                pq.offer(events[i++][1]);
-            if (!pq.isEmpty()) {
-                pq.poll();
+        for (int date = 1; date <= 100000; date++) {
+            while (!endDates.isEmpty() && endDates.peek() < date)
+                endDates.poll();
+            while (i < n && events[i][0] == date)
+                endDates.offer(events[i++][1]);
+            if (!endDates.isEmpty()) {
+                endDates.poll();
                 ++res;
             }
         }
