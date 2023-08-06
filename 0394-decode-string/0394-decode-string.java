@@ -20,6 +20,7 @@ class Solution {
                 // decode k[decodedString], by pushing decodedString k times into stack
                 while (k != 0) {
                     for (int j = decodedString.size() - 1; j >= 0; j--) {
+                        //System.out.println(decodedString.get(j));
                         stack.push(decodedString.get(j));
                     }
                     k--;
@@ -33,7 +34,9 @@ class Solution {
         // get the result from stack
         char[] result = new char[stack.size()];
         for (int i = result.length - 1; i >= 0; i--) {
+            
             result[i] = stack.pop();
+            //System.out.println(result[i]);
         }
         return new String(result);
     }
