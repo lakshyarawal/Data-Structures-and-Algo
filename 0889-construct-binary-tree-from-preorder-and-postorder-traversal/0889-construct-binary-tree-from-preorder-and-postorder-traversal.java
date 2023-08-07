@@ -14,24 +14,31 @@
  * }
  */
 class Solution {
-    Map<Integer, Integer> index_post = new HashMap();
-    Map<Integer, Integer> index_pre = new HashMap();
+ int postpreindex=0;
+ public  TreeNode constructFromPrePost(int[] pre, int[] post) {
+			 
+			 HashMap<Integer,Integer> map=new HashMap<>();
+		        for(int i=0;i<post.length;i++) {
+		        	map.put(post[i], i);
+		        }
+		       return helper(pre,post,map,0,post.length-1);
+		    }
 
-    public TreeNode constructFromPrePost(int[] preorder, int[] postorder) {
-        for(int i=0;i<preorder.length;i++){
-            index_pre.put(preorder[i], i);
-            index_post.put(postorder[i], i);
-        }
-        return dfs(0, preorder.length-1, preorder, postorder); 
-    }
-    
-    public TreeNode dfs(int start, int end, int[] pre, int[] post){
-        if(start>end){return null;}
-        if(start==end)return new TreeNode(pre[start]);
-        TreeNode root = new TreeNode(pre[start]);
-        int middle = index_pre.get(post[index_post.get(pre[start])-1]);
-        root.left = dfs(start+1, middle-1, pre, post);
-        root.right = dfs(middle, end, pre, post);
-        return root;
-    }
+
+	private  TreeNode helper(int[] preorder, int[] postorder,HashMap<Integer, Integer> map, int start, int end) {
+			if(start>end) {
+				return null;
+			}
+			TreeNode root=new TreeNode(preorder[postpreindex++]);
+			
+			if(start==end) {
+				return root;
+			}
+			
+			int index=map.get(preorder[postpreindex]);
+			
+			root.left=helper(preorder,postorder,map,start,index);
+			root.right=helper(preorder,postorder,map,index+1,end-1);
+			return root;
+		}
 }
