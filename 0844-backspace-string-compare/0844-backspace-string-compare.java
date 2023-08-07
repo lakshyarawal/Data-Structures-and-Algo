@@ -1,27 +1,35 @@
 class Solution {
+
     public boolean backspaceCompare(String s, String t) {
-        Stack<Character> s1 = new Stack<>();
-        Stack<Character> s2 = new Stack<>();
-        for(int i = 0; i < s.length(); i++){
-            if(s.charAt(i) == '#' && !s1.isEmpty()){
-                s1.pop();
-            }else if(s.charAt(i) != '#'){
-                s1.push(s.charAt(i));
+        int charIdx1 = 0, charIdx2 = 0;
+        char[] sChars = s.toCharArray(); // Convert strings to char arrays
+        char[] tChars = t.toCharArray();
+
+        for (int i = 0; i < sChars.length; i++) {
+            if (sChars[i] != '#') {
+                sChars[charIdx1] = sChars[i];
+                charIdx1++;
+            } else {
+                if (charIdx1 > 0) {
+                    charIdx1--;
+                }
             }
         }
-        for(int i = 0; i < t.length(); i++){
-            if(t.charAt(i) == '#' && !s2.isEmpty()){
-                s2.pop();
-            }else if(t.charAt(i) != '#'){
-                s2.push(t.charAt(i));
+
+        for (int i = 0; i < tChars.length; i++) {
+            if (tChars[i] != '#') {
+                tChars[charIdx2] = tChars[i];
+                charIdx2++;
+            } else {
+                if (charIdx2 > 0) {
+                    charIdx2--;
+                }
             }
         }
-        // System.out.println(Arrays.toString(s1.toArray()));
-        // System.out.println(Arrays.toString(s2.toArray()));
-        while(!s1.isEmpty() && !s2.isEmpty()){
-            if(s1.pop() != s2.pop()) return false;
-        }
-        if(!s1.isEmpty() || !s2.isEmpty()) return false;
-        return true;
+
+        String newS = new String(sChars, 0, charIdx1); // Create new strings from modified char arrays
+        String newT = new String(tChars, 0, charIdx2);
+
+        return newS.equals(newT);
     }
 }
