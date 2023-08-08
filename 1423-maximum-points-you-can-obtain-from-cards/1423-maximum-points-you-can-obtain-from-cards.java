@@ -8,7 +8,6 @@ class Solution {
             currentSum += cardPoints[i] - cardPoints[i - windowSize];
             minSubarraySum = Math.min(minSubarraySum, currentSum);
         }
-
         return totalSum - minSubarraySum;
     }
 }
