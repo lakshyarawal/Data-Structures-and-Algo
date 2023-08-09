@@ -8,11 +8,12 @@ class Solution {
         Arrays.fill(prev, 1);
         curr[0] = 1;
         
-        for(int i = 1; i < m; i++){
+        while(m > 1){
             for(int j = 1; j <n; j++){
                 curr[j] = prev[j] + curr[j-1];
             }
             prev = curr;
+            m--;
         }
         
         //System.out.println(Arrays.toString(curr));
