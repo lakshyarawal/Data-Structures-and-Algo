@@ -2,8 +2,8 @@ class Solution {
     public int[][] kClosest(int[][] points, int k) {
         PriorityQueue<int[]> heap = new PriorityQueue<int[]>(new Comparator<int[]>() { 
             @Override
-            public int compare(int[] left, int[] right) {
-                return getDistance(right) - getDistance(left);
+            public int compare(int[] p1, int[] p2) {
+                return getDistance(p2) - getDistance(p1);
             }
         });
         
