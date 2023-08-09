@@ -1,6 +1,7 @@
 class Solution {
     int maxLen = 0;
     public int maxLength(List<String> arr) {
+        if(arr == null || arr.size() == 0) return 0;
         backtracking(arr, 0, new StringBuilder(), new HashSet<Character>());
         return maxLen;
     }
@@ -9,9 +10,12 @@ class Solution {
         for (int i = start; i < arr.size(); i++) {
             boolean add = true;
             HashSet<Character> currSet = new HashSet<>();
-            for (int j = 0; j < arr.get(i).length(); j++) {
-                if (currSet.contains(arr.get(i).charAt(j)) || set.contains(arr.get(i).charAt(j))) add = false;
-                currSet.add(arr.get(i).charAt(j));
+            for (char cS : arr.get(i).toCharArray()) {
+                if (currSet.contains(cS) || set.contains(cS)){
+                    add = false;
+                    break;
+                }
+                currSet.add(cS);
             }
             if (add) {
                 sb.append(arr.get(i));
