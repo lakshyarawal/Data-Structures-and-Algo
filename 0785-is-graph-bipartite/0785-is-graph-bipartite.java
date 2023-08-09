@@ -12,10 +12,10 @@ class Solution {
             while (!queue.isEmpty()) {
                 int cur = queue.poll();
                 for (int next : graph[cur]) {
-                    if (colors[next] == 0) {          // If this node hasn't been colored;
-                        colors[next] = -colors[cur];  // Color it with a different color;
+                    if (colors[next] == 0) {          
+                        colors[next] = -colors[cur]; 
                         queue.offer(next);
-                    } else if (colors[next] != -colors[cur]) {   // If it is colored and its color is different, return false;
+                    } else if (colors[next] == colors[cur]) {
                         return false;
                     }
                 }
