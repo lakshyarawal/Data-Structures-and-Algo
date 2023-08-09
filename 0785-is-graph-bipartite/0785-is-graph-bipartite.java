@@ -13,9 +13,7 @@ class Solution {
                 if (visited[c] == 0) {
                     visited[c] = (visited[current] == 1) ? 2 : 1;
                     q.offer(c);
-                } else {
-                    if (visited[c] == visited[current]) return false;
-                }
+                } else if (visited[c] == visited[current]) return false;
             }
         }
         return true;
