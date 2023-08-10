@@ -1,40 +1,22 @@
 class Solution {
-	    public int maxArea(int h, int w, int[] horizontalCuts, int[] verticalCuts) {
+   public int maxArea(int h, int w, int[] horizontalCuts, int[] verticalCuts) {
+        // Sort the arrays of cuts
+        Arrays.sort(horizontalCuts);
+        Arrays.sort(verticalCuts);
 
-        // coppied
-        
-        ArrayList<Integer> horizontal = new ArrayList<>();
-        ArrayList<Integer> vertical = new ArrayList<>();
-        for(int el: horizontalCuts){
-            horizontal.add(el);
+        // Initialize variables for tracking maximum dimensions
+        int maxHorizontal = Math.max(horizontalCuts[0], h - horizontalCuts[horizontalCuts.length - 1]);
+        int maxVertical = Math.max(verticalCuts[0], w - verticalCuts[verticalCuts.length - 1]);
+
+        // Calculate maximum dimensions between consecutive cuts
+        for (int i = 1; i < horizontalCuts.length; i++) {
+            maxHorizontal = Math.max(maxHorizontal, horizontalCuts[i] - horizontalCuts[i - 1]);
         }
-        for(int el: verticalCuts){
-            vertical.add(el);
-        }
-        Collections.sort(horizontal);
-        Collections.sort(vertical);
-        if(horizontal.size() == 0) {
-            horizontal.add(0);
-        }
-        if(vertical.size() == 0) {
-            vertical.add(0);
+        for (int i = 1; i < verticalCuts.length; i++) {
+            maxVertical = Math.max(maxVertical, verticalCuts[i] - verticalCuts[i - 1]);
         }
 
-        horizontal.add(h);
-        vertical.add(w);
-
-        long maxHorizontal = horizontal.get(0);
-        long maxVertical = vertical.get(0);
-        for(int i=1; i<horizontal.size(); i++){
-            int diff = horizontal.get(i) - horizontal.get(i-1);
-            maxHorizontal = Math.max(maxHorizontal, diff);
-        }
-        for(int i=1; i<vertical.size(); i++){
-            int diff = vertical.get(i) - vertical.get(i-1);
-            maxVertical = Math.max(maxVertical, diff);
-        }
-
-        return (int)((maxHorizontal * maxVertical) % (1_000_000_007));
+        // Calculate and return the maximum area
+        return (int) ((long) maxHorizontal * maxVertical % 1_000_000_007);
     }
-
 }
