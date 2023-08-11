@@ -1,48 +1,22 @@
 class Solution {
     public int sumSubarrayMins(int[] arr) {
-        Stack<Integer>s=new Stack<>();
-        int n=arr.length;
-        int left[]=new int[n];
-        int right[]=new int[n];
-        //left[]
-        for(int i=0;i<n;i++){
-            if(s.empty()){
-                left[i]=-1;
+        int[] dis = new int[arr.length];
+        Stack<int[]> st = new Stack<>();
+        for(int i = 0; i< arr.length; i++) {
+            while(!st.empty() && st.peek()[0] >= arr[i]) {
+                st.pop();
             }
-            else if(arr[s.peek()]<arr[i]){
-                left[i]=s.peek();
-            }
-            else{
-                while(!s.isEmpty()&&arr[s.peek()]>arr[i]){
-                    s.pop();
-                }
-                if(s.isEmpty())left[i]=-1;
-                else left[i]=s.peek();
-            }
-            s.push(i);
+            dis[i] = st.empty() ? i + 1: i - st.peek()[1];
+            st.push(new int[]{arr[i], i});
         }
-        //right[]
-        s.clear();
-        for(int i=n-1;i>=0;i--){
-            if(s.isEmpty()){
-                right[i]=n;
-            }
-            else if(arr[s.peek()]<arr[i]){
-                right[i]=s.peek();
-            }
-            else{
-                while(!s.isEmpty()&&arr[s.peek()]>=arr[i])s.pop();
-                if(s.isEmpty())right[i]=n;
-                else right[i]=s.peek();
-            }
-            s.push(i);
+        double count  = 0;
+        double[] c = new double[arr.length + 1];
+        for(int i = 0; i < arr.length; i++) {
+            c[i + 1] = c[i - dis[i] + 1] + arr[i] * (dis[i]);
         }
-        long total=0;
-        for(int i=0;i<n;i++){
-             long p=((i-left[i])*(right[i]-i));
-             total=(total+arr[i]*p)%1000000007;
-
+        for(double d: c) {
+            count += d;
         }
-        return (int)total;
+        return (int)(count % 1000000007);
     }
 }
