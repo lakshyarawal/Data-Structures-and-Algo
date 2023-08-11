@@ -7,7 +7,6 @@ class Solution {
         Stack<int[]> nextLess = new Stack<>();
         int [] left = new int [length];
         int [] right = new int [length];
-        // previous less element - imagine 2, 5, 6, 5 you don't want to double count so you can either enforce the = on the left or right array.
         for (int i=0; i<length; i++) {
             while (!previousLess.isEmpty() && previousLess.peek()[0] >= arr[i]) {
                 previousLess.pop();
@@ -15,7 +14,6 @@ class Solution {
             left[i] = previousLess.isEmpty() ? i + 1 : i - previousLess.peek()[1];
             previousLess.push(new int []{arr[i], i});
         }
-        // next less element. for this we do reverse traversal
         for (int i=length - 1; i>=0; i--) {
             while (!nextLess.isEmpty() && nextLess.peek()[0] > arr[i]) {
                 nextLess.pop();
