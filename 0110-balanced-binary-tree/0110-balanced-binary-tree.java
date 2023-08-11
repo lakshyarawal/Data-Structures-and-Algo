@@ -40,6 +40,7 @@ class Solution {
         if (root == null) {
           return true;
         }
+        
         return height(root) != Integer.MIN_VALUE;
     }
 }
