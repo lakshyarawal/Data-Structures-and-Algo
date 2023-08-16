@@ -2,9 +2,9 @@ class Solution {
 public int leastInterval(char[] tasks, int n) {
      Map<Character, Integer> map = new HashMap<>();
     for (int i = 0; i < tasks.length; i++) {
-        map.put(tasks[i], map.getOrDefault(tasks[i], 0) + 1); // map key is TaskName, and value is number of times to be executed.
+        map.put(tasks[i], map.getOrDefault(tasks[i], 0) + 1);
     }
-    PriorityQueue<Map.Entry<Character, Integer>> q = new PriorityQueue<>( //frequency sort
+    PriorityQueue<Map.Entry<Character, Integer>> q = new PriorityQueue<>(
             (a,b) -> a.getValue() != b.getValue() ? b.getValue() - a.getValue() : a.getKey() - b.getKey());
 
     q.addAll(map.entrySet());
