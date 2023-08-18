@@ -15,33 +15,35 @@
  */
 class Solution {
     public int widthOfBinaryTree(TreeNode root) {
-        if(root == null) return 0;
-        Queue<TreeNode> q = new LinkedList<TreeNode>();
-        Map<TreeNode, Integer> m = new HashMap<TreeNode, Integer>();
-        q.offer(root);
-        m.put(root, 1);
-        int curW = 0;
-        int maxW = 0;
-        while(!q.isEmpty()){
+        Queue<TreeNode> q = new LinkedList<>();
+        Queue<Integer> qIndex = new LinkedList<>();
+        q.add(root);
+        qIndex.add(1); //store index, assuming root's index is 1
+        int max = 0;
+        while(!q.isEmpty())
+        {
             int size = q.size();
-            int start = 0;
-            int end = 0;
-            for(int i = 0; i < size; i++){
-                TreeNode node = q.poll();
-                if(i == 0) start = m.get(node);
-                if(i == size - 1) end = m.get(node);
-                if(node.left != null){
-                    m.put(node.left, m.get(node) * 2);
-                    q.offer(node.left);
+            int start = 0, end = 0;
+            for(int i=0; i<size; i++)
+            {
+                TreeNode node = q.remove();
+                int index = qIndex.remove();
+                if(i==0) start = index; //start and end index for each level
+                if(i==size-1) end = index;
+                if(node.left!=null)
+                {
+                    q.add(node.left);
+                    qIndex.add(2*index);
                 }
-                if(node.right != null){
-                    m.put(node.right, m.get(node) * 2 + 1);
-                    q.offer(node.right);
+                
+                if(node.right!=null)
+                {
+                    q.add(node.right);
+                    qIndex.add(2*index+1);
                 }
             }
-            curW = end - start + 1;
-            maxW = Math.max(curW, maxW);
+            max = Math.max(max, end - start + 1);
         }
-        return maxW;
+        return max;    
     }
 }
