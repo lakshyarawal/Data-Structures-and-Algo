@@ -38,7 +38,7 @@ class Solution {
         }
         
 //         System.out.println(Arrays.deepToString(grid));
-        System.out.println(Arrays.deepToString(time));
+        //System.out.println(Arrays.deepToString(time));
         for(int i = 0; i < grid.length; i++){
             for(int j = 0; j < grid[i].length; j++){
                 if(grid[i][j] == 1){
