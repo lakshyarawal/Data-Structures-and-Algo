@@ -15,7 +15,7 @@ class Solution {
             }
             maxLength = Math.max(end-start, maxLength);
         }
-        maxLength = Math.max(end-start, maxLength);
+        //maxLength = Math.max(end-start, maxLength);
         return maxLength;
     }
 }
