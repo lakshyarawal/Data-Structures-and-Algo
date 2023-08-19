@@ -1,22 +1,26 @@
-class Solution {
+public class Solution {
     public int kthSmallest(int[][] matrix, int k) {
-       PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
-        
         int n = matrix.length;
-        
-        for(int i = 0;i<n;i++){
-            for(int j = 0;j<n;j++){
-                if(pq.size() < k){
-                    pq.add(matrix[i][j]);
-                }else{ //equal to k
-                    if(matrix[i][j] < pq.peek()){ //if incoming element is less than peek
-                        pq.poll();
-                        pq.add(matrix[i][j]);
-                    }
-                }
+        int lo = matrix[0][0], hi = matrix[n - 1][n - 1];
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+            int count = getLessEqual(matrix, mid);
+            if (count < k) lo = mid + 1;
+            else hi = mid - 1;
+        }
+        return lo;
+    }
+    
+    private int getLessEqual(int[][] matrix, int val) {
+        int res = 0;
+        int n = matrix.length, i = n - 1, j = 0;
+        while (i >= 0 && j < n) {
+            if (matrix[i][j] > val) i--;
+            else {
+                res += i + 1;
+                j++;
             }
         }
-        
-        return pq.peek();
+        return res;
     }
 }
