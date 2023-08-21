@@ -14,11 +14,17 @@ class Solution {
     }
     
     public boolean checkInclusion(String s1, String s2) {
-        if(s1.length() > s2.length())checkInclusion(s2, s1);
+        if(s1.length() > s2.length())return false;
+        if(s1.length() == s2.length()) return compareCount(getChar(s2), getChar(s1));
         int sSize = s1.length();
-        for(int i = 0; i <= s2.length() - sSize; i++){
-            //System.out.println("Comparing: "+ s2.substring(i, i+sSize));
-            if(compareCount(getChar(s2.substring(i, i+sSize)), getChar(s1))) return true;
+        int[] prev = getChar(s2.substring(0, sSize));
+        int[] res = getChar(s1);
+        if(compareCount(prev, res)) return true;
+        //System.out.println("Prev: " +s2.substring(0, sSize));
+        for(int i = sSize; i < s2.length(); i++){
+            prev[s2.charAt(i-sSize)-'a']--;
+            prev[s2.charAt(i)-'a']++;
+            if(compareCount(prev, res)) return true;
         }
         return false;
     }
