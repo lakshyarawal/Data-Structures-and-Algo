@@ -1,18 +1,21 @@
 class Solution {
-    public int longestConsecutive(int[] nums) {
-        Arrays.sort(nums);
-        if(nums.length == 0) return 0;
-        int l = 1;
-        int c = 1;
-        for(int i = 1; i < nums.length; i++){
-            if(nums[i] == nums[i-1]) continue;
-            if(nums[i] == nums[i-1]+1) c++;
-            else{
-                l = Math.max(l, c);
-                c = 1;
+    public int longestConsecutive(int[] num) {
+        int res = 0;
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for (int n : num) {
+            if (!map.containsKey(n)) {
+                int left = (map.containsKey(n - 1)) ? map.get(n - 1) : 0;
+                int right = (map.containsKey(n + 1)) ? map.get(n + 1) : 0;
+                int sum = left + right + 1;
+                map.put(n, sum);
+                res = Math.max(res, sum);
+                map.put(n - left, sum);
+                map.put(n + right, sum);
+            }
+            else {
+                continue;
             }
         }
-        l = Math.max(l, c);
-        return l;
+        return res;
     }
 }
