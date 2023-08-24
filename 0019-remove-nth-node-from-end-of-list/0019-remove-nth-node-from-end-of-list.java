@@ -9,26 +9,30 @@
  * }
  */
 class Solution {
-    int determineLength(ListNode head){
-        int counter = 1; 
-        while (head.next != null){
-            counter++;
-            head = head.next;
-        }
-        return counter;
-    }
-   
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        int len = determineLength(head);
-        if(len -n == 0) return head.next;
-        var walker = head;
-        for (int i = 0; i < (len - n-1); i++){
-            walker = walker.next;
-        } 
-        if (n == len || walker.next == null){walker.next = null;}
-        else {walker.next = walker.next.next;}
-
+        if(head == null) return null;
+        if(head.next == null && n == 1) return null;
+        int len = 0;
+        ListNode cur = head;
+        while(cur != null){
+            len++;
+            cur = cur.next;
+        }
+        System.out.println("LEN: "+ len);
+        if(n == len) return head.next;
+        len -=n;
+        len-=1;
+        ListNode temp = head;
+        while(len > 0){
+            len--;
+            temp = temp.next;
+        }
+        if(temp.next != null){
+             temp.next = temp.next.next;
+        }else{
+            temp.next = null;
+        }
+       
         return head;
-    
     }
 }
