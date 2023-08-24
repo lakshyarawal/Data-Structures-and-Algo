@@ -15,7 +15,7 @@ class Solution {
         int start = 1;
         int end = maxPile;
         while(start <= end){
-            int mid = start + ((end - start) >> 1);
+            int mid = start + ((end - start)/2);
             int t = calculateTime(mid, piles);
             if(t <= h){
                 end = mid - 1;
