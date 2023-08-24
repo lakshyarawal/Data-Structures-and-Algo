@@ -18,7 +18,7 @@ class Solution {
             len++;
             cur = cur.next;
         }
-        System.out.println("LEN: "+ len);
+        //System.out.println("LEN: "+ len);
         if(n == len) return head.next;
         len -=n;
         len-=1;
