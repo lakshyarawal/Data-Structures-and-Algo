@@ -1,48 +1,100 @@
 class Solution {
-public List<String> findWords(char[][] board, String[] words) {
-    List<String> res = new ArrayList<>();
-    TrieNode root = buildTrie(words);
-    for (int i = 0; i < board.length; i++) {
-        for (int j = 0; j < board[0].length; j++) {
-            dfs (board, i, j, root, res);
+
+    private static int COLS;
+    private static int ROWS;
+    private Trie currentTrie;
+
+    public List<String> findWords(char[][] board, String[] words) {
+        Trie root = new Trie();
+        for (String word : words) {
+            root.addWord(word);
+        }
+
+        ROWS = board.length;
+        COLS = board[0].length;
+        HashSet<String> res = new HashSet<>();
+        HashSet<String> visit = new HashSet<>();
+
+        for (int r = 0; r < ROWS; r++) {
+            for (int c = 0; c < COLS; c++) {
+                dfs(r, c, root, "", res, visit, board, root);
+            }
+        }
+        return new ArrayList<>(res);
+    }
+
+    public void dfs(
+        int r,
+        int c,
+        Trie node,
+        String word,
+        HashSet<String> res,
+        HashSet<String> visit,
+        char[][] board,
+        Trie root
+    ) {
+        if (
+            r < 0 ||
+            c < 0 ||
+            r == ROWS ||
+            c == COLS ||
+            !node.children.containsKey(board[r][c]) ||
+            node.children.get(board[r][c]).refs < 1 ||
+            visit.contains(r + "-" + c)
+        ) {
+            return;
+        }
+
+        visit.add(r + "-" + c);
+        node = node.children.get(board[r][c]);
+        word += board[r][c];
+        if (node.isWord) {
+            node.isWord = false;
+            res.add(word);
+            root.removeWord(word);
+        }
+
+        dfs(r + 1, c, node, word, res, visit, board, root);
+        dfs(r - 1, c, node, word, res, visit, board, root);
+        dfs(r, c + 1, node, word, res, visit, board, root);
+        dfs(r, c - 1, node, word, res, visit, board, root);
+        visit.remove(r + "-" + c);
+    }
+
+    class Trie {
+
+        public HashMap<Character, Trie> children;
+        public boolean isWord;
+        public int refs = 0;
+
+        public Trie() {
+            children = new HashMap<>();
+        }
+
+        public void addWord(String word) {
+            currentTrie = this;
+            currentTrie.refs += 1;
+            for (int i = 0; i < word.length(); i++) {
+                char currentCharacter = word.charAt(i);
+                if (!currentTrie.children.containsKey(currentCharacter)) {
+                    currentTrie.children.put(currentCharacter, new Trie());
+                }
+                currentTrie = currentTrie.children.get(currentCharacter);
+                currentTrie.refs += 1;
+            }
+            currentTrie.isWord = true;
+        }
+
+        public void removeWord(String word) {
+            currentTrie = this;
+            currentTrie.refs -= 1;
+            for (int i = 0; i < word.length(); i++) {
+                char currentCharacter = word.charAt(i);
+                if (currentTrie.children.containsKey(currentCharacter)) {
+                    currentTrie = currentTrie.children.get(currentCharacter);
+                    currentTrie.refs -= 1;
+                }
+            }
         }
     }
-    return res;
-}
-
-public void dfs(char[][] board, int i, int j, TrieNode p, List<String> res) {
-    char c = board[i][j];
-    if (c == '#' || p.next[c - 'a'] == null) return;
-    p = p.next[c - 'a'];
-    if (p.word != null) {   // found one
-        res.add(p.word);
-        p.word = null;     // de-duplicate
-    }
-
-    board[i][j] = '#';
-    if (i > 0) dfs(board, i - 1, j ,p, res); 
-    if (j > 0) dfs(board, i, j - 1, p, res);
-    if (i < board.length - 1) dfs(board, i + 1, j, p, res); 
-    if (j < board[0].length - 1) dfs(board, i, j + 1, p, res); 
-    board[i][j] = c;
-}
-
-public TrieNode buildTrie(String[] words) {
-    TrieNode root = new TrieNode();
-    for (String w : words) {
-        TrieNode p = root;
-        for (char c : w.toCharArray()) {
-            int i = c - 'a';
-            if (p.next[i] == null) p.next[i] = new TrieNode();
-            p = p.next[i];
-       }
-       p.word = w;
-    }
-    return root;
-}
-
-class TrieNode {
-    TrieNode[] next = new TrieNode[26];
-    String word;
-}
 }
