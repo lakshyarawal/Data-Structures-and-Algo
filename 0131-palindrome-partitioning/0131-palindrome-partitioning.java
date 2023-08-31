@@ -1,26 +1,37 @@
 public class Solution {
 
     public List<List<String>> partition(String s) {
-        List<List<String>> res = new ArrayList<List<String>>();
-        if (s.equals("")) {
-            res.add(new ArrayList<String>());
-            return res;
-        }
-        for (int i = 0; i < s.length(); i++) {
-            if (isPalindrome(s, i + 1)) {
-                for (List<String> list : partition(s.substring(i + 1))) {
-                    list.add(0, s.substring(0, i + 1));
-                    res.add(list);
-                }
-            }
-        }
-        return res;
+        // Backtracking
+        // Edge case
+        if(s == null || s.length() == 0) return new ArrayList<>();
+        
+        List<List<String>> result = new ArrayList<>();
+        helper(s, new ArrayList<>(), result);
+        return result;
     }
-
-    public boolean isPalindrome(String s, int n) {
-        char[] c = s.toCharArray();
-        for (int i = 0; i < n / 2; i++) {
-            if (c[i] != c[n - i - 1]) return false;
+    public void helper(String s, List<String> step, List<List<String>> result) {
+        // Base case
+        if(s == null || s.length() == 0) {
+            result.add(new ArrayList<>(step));
+            return;
+        }
+        for(int i = 1; i <= s.length(); i++) {
+            String temp = s.substring(0, i);
+            if(!isPalindrome(temp)) continue; // only do backtracking when current string is palindrome
+            
+            step.add(temp);  // choose
+            helper(s.substring(i, s.length()), step, result); // explore
+            step.remove(step.size() - 1); // unchoose
+        }
+        return;
+    }
+    public boolean isPalindrome(String s) {
+        int left = 0, right = s.length() - 1;
+        while(left <= right) {
+            if(s.charAt(left) != s.charAt(right))
+                return false;
+            left ++;
+            right --;
         }
         return true;
     }
