@@ -18,8 +18,9 @@ public class Solution {
     }
 
     public boolean isPalindrome(String s, int n) {
+        char[] c = s.toCharArray();
         for (int i = 0; i < n / 2; i++) {
-            if (s.charAt(i) != s.charAt(n - i - 1)) return false;
+            if (c[i] != c[n - i - 1]) return false;
         }
         return true;
     }
