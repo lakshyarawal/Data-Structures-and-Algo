@@ -1,25 +1,29 @@
 class Solution {
-    public int[][] kClosest(int[][] points, int k) {
-        PriorityQueue<int[]> heap = new PriorityQueue<int[]>(new Comparator<int[]>() { 
-            @Override
-            public int compare(int[] p1, int[] p2) {
-                return getDistance(p2) - getDistance(p1);
-            }
-        });
-        
-        for (int[] point: points) {
-            heap.add(point);
-            if (heap.size() > k)
-                heap.poll();
+    class Point implements Comparable<Point>{
+        int x;
+        int y;
+        double distance;
+        public Point(int x, int y){
+            this.x = x;
+            this.y = y;
+            distance = Math.pow(x, 2) + Math.pow(y, 2);
+        }
+        public int compareTo(Point p){
+            return (int)(this.distance - p.distance);
         }
         
-        int[][] result = new int[k][2];
-        while (k > 0)
-            result[--k] = heap.poll();
-        
-        return result;
     }
-    private int getDistance(int [] point) {
-        return point[0] * point[0] + point[1] * point[1];
+    public int[][] kClosest(int[][] points, int k) {
+        int[][] res = new int[k][2];
+        PriorityQueue<Point> pq = new PriorityQueue<>();
+        for(int[] point : points){
+            pq.add(new Point(point[0], point[1]));
+        }
+        for(int i = 0; i < k; i++){
+            Point p = pq.remove();
+            res[i][0] = p.x;
+            res[i][1] = p.y;
+        }
+        return res;
     }
 }
