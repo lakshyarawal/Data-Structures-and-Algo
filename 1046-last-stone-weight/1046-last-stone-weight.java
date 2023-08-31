@@ -9,7 +9,7 @@ class Solution {
         while(pq.size() > 1){
             int a = pq.remove();
             int b = pq.remove();
-            System.out.println("A: " + a + " B: "+ b);
+            //System.out.println("A: " + a + " B: "+ b);
             if(a == b) continue;
             if(a > b) pq.add(a-b);
         }
