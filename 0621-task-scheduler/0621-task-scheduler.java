@@ -1,33 +1,37 @@
-class Solution {
-public int leastInterval(char[] tasks, int n) {
-     Map<Character, Integer> map = new HashMap<>();
-    for (int i = 0; i < tasks.length; i++) {
-        map.put(tasks[i], map.getOrDefault(tasks[i], 0) + 1);
-    }
-    PriorityQueue<Map.Entry<Character, Integer>> q = new PriorityQueue<>(
-            (a,b) -> a.getValue() != b.getValue() ? b.getValue() - a.getValue() : a.getKey() - b.getKey());
-
-    q.addAll(map.entrySet());
-
-    int count = 0;
-    while (!q.isEmpty()) {
-        int k = n + 1;
-        List<Map.Entry> tempList = new ArrayList<>();
-        while (k > 0 && !q.isEmpty()) {
-            Map.Entry<Character, Integer> top = q.poll(); // most frequency task
-            top.setValue(top.getValue() - 1); // decrease frequency, meaning it got executed
-            tempList.add(top); // collect task to add back to queue
-            k--;
-            count++; //successfully executed task
+public class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        if (n == 0) return tasks.length;  // If the cooldown period is 0, then no waiting is needed.
+        
+        // Create a map to store the count of each task.
+        Map<Character, Integer> taskToCount = new HashMap<>();
+        for (char c : tasks) {
+            taskToCount.put(c, taskToCount.getOrDefault(c, 0) + 1);
         }
-
-        for (Map.Entry<Character, Integer> e : tempList) {
-            if (e.getValue() > 0) q.add(e); // add valid tasks 
+        
+        // Create a priority queue to store the counts of tasks in descending order.
+        Queue<Integer> queue = new PriorityQueue<>((i1, i2) -> i2 - i1);
+        for (char c : taskToCount.keySet()) queue.offer(taskToCount.get(c));
+        
+        // Create a map to store the cooldown time remaining for each task.
+        Map<Integer, Integer> coolDown = new HashMap<>();
+        int currTime = 0;  // Initialize the current time.
+        
+        // Process tasks and cooldowns until the priority queue is empty and all cooldowns are cleared.
+        while (!queue.isEmpty() || !coolDown.isEmpty()) {
+            // Check if there's a task that can be released from cooldown and add it back to the queue.
+            if (coolDown.containsKey(currTime - n - 1)) {
+                queue.offer(coolDown.remove(currTime - n - 1));
+            }
+            
+            // If there are tasks in the queue, process the next task.
+            if (!queue.isEmpty()) {
+                int left = queue.poll() - 1;  // Decrease the count of the task being processed.
+                if (left != 0) coolDown.put(currTime, left);  // If the count is not zero, add it to cooldown.
+            }
+            
+            currTime++;  // Move to the next time unit.
         }
-
-        if (q.isEmpty()) break;
-        count = count + k; // if k > 0, then it means we need to be idle
+        
+        return currTime;  // Return the total time units taken to complete all tasks.
     }
-    return count;
-}
 }
