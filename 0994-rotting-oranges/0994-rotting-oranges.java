@@ -7,7 +7,7 @@ class Solution {
             if(newr >= grid.length || newr < 0 || newc >= grid[r].length || newc < 0) continue;
             if(grid[newr][newc] == 1 || (grid[newr][newc] == -1 && time[newr][newc] > t+1)){
                 grid[newr][newc] = -1;
-                time[newr][newc] = Math.min(time[newr][newc], t+1);
+                time[newr][newc] = t+1;
                 dfs(newr, newc, grid, t+1, time);
             }
         }
