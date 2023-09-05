@@ -3,7 +3,7 @@ public class Solution {
     int max = amount + 1;
     int[] dp = new int[amount + 1];
     Arrays.fill(dp, max);
-      Arrays.sort(coins);
+    Arrays.sort(coins);
     dp[0] = 0;
     for (int i = 1; i <= amount; i++) {
       for (int j = 0; j < coins.length; j++) {
