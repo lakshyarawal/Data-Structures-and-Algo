@@ -1,21 +1,23 @@
 public class Solution {
+    HashMap<String, Integer> dp;
+   
     public int findTargetSumWays(int[] nums, int S) {
-        int total = Arrays.stream(nums).sum();
-        int[] dp = new int[2 * total + 1];
-        dp[nums[0] + total] = 1;
-        dp[-nums[0] + total] += 1;
+        dp = new HashMap<>();
+        return calculate(nums, 0, 0, S);
+    }
+    
+    public int calculate(int[] nums, int i, int sum, int S) {
+        String s = i + "," + sum;
         
-        for (int i = 1; i < nums.length; i++) {
-            int[] next = new int[2 * total + 1];
-            for (int sum = -total; sum <= total; sum++) {
-                if (dp[sum + total] > 0) {
-                    next[sum + nums[i] + total] += dp[sum + total];
-                    next[sum - nums[i] + total] += dp[sum + total];
-                }
-            }
-            dp = next;
+        if (i == nums.length) {
+           return (sum == S)? 1 : 0; 
         }
-        
-        return Math.abs(S) > total ? 0 : dp[S + total];
+        if(dp.containsKey(s)){
+            return dp.get(s); 
+        }
+
+        int res = calculate(nums, i + 1, sum + nums[i], S) + calculate(nums, i + 1, sum - nums[i], S);
+        dp.put(s, res);
+        return res;
     }
 }
