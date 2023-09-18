@@ -1,23 +1,42 @@
 class Solution {
-    public int[] minInterval(int[][] A, int[] queries) {
-        TreeMap<Integer, Integer> pq = new TreeMap<>();
-        HashMap<Integer, Integer> res = new HashMap<>();
-        int i = 0, n = A.length, m = queries.length;
-        int[] Q = queries.clone(), res2 = new int[m];
-        Arrays.sort(A, (a, b) -> Integer.compare(a[0] , b[0]));
-        Arrays.sort(Q);
-        for (int q : Q) {
-            while (i < n && A[i][0] <= q) {
-                int l = A[i][0], r = A[i++][1];
-                pq.put(r - l + 1, r);
-            }
-            while (!pq.isEmpty() && pq.firstEntry().getValue() < q)
-                pq.pollFirstEntry();
-            res.put(q, pq.isEmpty() ? -1 : pq.firstKey());
-        }
-        i = 0;
-        for (int q : queries)
-            res2[i++] = res.get(q);
-        return res2;
-    }
+   
+     public int[] minInterval(int[][] intervals, int[] queries) {
+        
+         Arrays.sort(intervals, Comparator.comparingInt(a-> ((int[])a)[0]));
+         int[] copyQueries = queries.clone();
+         Arrays.sort(copyQueries);
+         
+         PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> ((int[])a)[0]));
+         Map<Integer, Integer> resMap = new HashMap<>();
+         
+         int N = intervals.length;
+         int i=0;
+         for(int k = 0; k < copyQueries.length; k++){
+             int q = copyQueries[k];
+             if(k>0 && q==copyQueries[k-1])
+                 continue;
+             
+             //add eligible intervals based on start time(i.e start <= q)
+             while(i < N && intervals[i][0] <= q){
+                 pq.offer(new int[]{intervals[i][1] - intervals[i][0] + 1,
+                                    intervals[i][1]});
+                 i++;
+             }
+             
+             //remove ineligible intervals based on end time(i.e end < q)
+             while(!pq.isEmpty() && pq.peek()[1] < q)
+                 pq.poll();
+             
+             resMap.put(q, pq.isEmpty() ? -1 : pq.peek()[0]);
+         }
+         
+         int[] res = new int[queries.length];
+         int ind=0;
+         for(int q : queries){
+             res[ind++] = resMap.get(q);
+         }
+         
+         return res;
+     }
+   
 }
