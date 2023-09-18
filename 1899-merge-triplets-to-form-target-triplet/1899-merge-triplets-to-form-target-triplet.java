@@ -11,7 +11,7 @@ class Solution {
             }
             if(canUpdate){
                 for(int i = 0; i < 3; i++){
-                    res[i] = Math.max( res[i], t[i]);
+                    res[i] = Math.max(res[i], t[i]);
                 }
             }
         }
