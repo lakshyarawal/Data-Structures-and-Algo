@@ -15,7 +15,7 @@ class Solution {
                 heappushK(x, k);
                 if (x != n / x) {
                     heappushK(n / x, k);    
-                }    
+                }
             }    
         }
                 
