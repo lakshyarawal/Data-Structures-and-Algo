@@ -2,7 +2,7 @@ class Solution {
     public long numberOfWays(String s) {
         long ans = 0;
         int len = s.length();
-        if(len <=2)return ans;
+
         long totZeros = 0;
         char[] ch = s.toCharArray();
         for(int i=0;i<len;i++){
