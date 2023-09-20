@@ -1,16 +1,10 @@
 class Solution {
-    
     public long maximumSubarraySum(int[] nums, int k) {
-        
         long maxSum =0;
         long curSum =0;
-        int j=0; // points to start of the window
-        
-        // Key: ArrayValue, value: index
+        int j=0;
         HashMap<Integer, Integer> map = new HashMap();
-        
         for(int i=0;i<nums.length;i++){
-            
             curSum += nums[i];
             if(map.containsKey(nums[i])){
                 int firstInstance = map.get(nums[i]);
