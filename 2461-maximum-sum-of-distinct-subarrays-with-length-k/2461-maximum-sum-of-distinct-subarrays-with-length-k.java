@@ -1,21 +1,21 @@
-class Solution 
-{
-    public long maximumSubarraySum(int[] nums, int k) 
-    {
-        Long res = 0L, cur = 0L, dup = -1L;
-        int[] pos = IntStream.range(0, 100001).map(j -> -1).toArray();
-        
-        for (int i = 0; i < nums.length; ++i)
-        {
-            cur += nums[i];
-            if (i >= k) cur -= nums[i-k];
-            
-            dup = Math.max(dup, pos[nums[i]]);
-            if (i - dup >= k) res = Math.max(res, cur);
-            
-            pos[nums[i]] = i;
-        }
-        
-        return res;
+class Solution {
+    public long maximumSubarraySum(int[] nums, int k) {
+        int n = nums.length;
+		int start = 0, end = 0;
+		Long sum = 0l, max = 0l;
+		Set<Integer> set = new HashSet<>();
+		while (end < n) {
+			int val = nums[end];
+			while (set.contains(val) || (end - start + 1 > k) && start < end) {
+				sum -= nums[start];
+				set.remove(nums[start++]);
+			}
+			sum += val;
+			set.add(val);
+			if (end - start + 1 == k)
+				max = Math.max(max, sum);
+			end++;
+		}
+		return max;
     }
 }
