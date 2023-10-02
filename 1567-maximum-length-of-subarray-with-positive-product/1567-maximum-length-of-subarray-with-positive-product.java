@@ -1,45 +1,23 @@
 class Solution {
     public int getMaxLen(int[] nums) {
-        int maxLen=0;
-        int negative_count=0;
-        int index=0;
-        for(int i=0;i<nums.length;i++)
-        {
-            if(nums[i]==0)
-            {
-                index=i+1;
-                negative_count=0;
-                continue;
+        int positive = 0, negative = 0;    // length of positive and negative results
+        int ans = 0;
+        for(int x : nums) {
+            if(x == 0)  {
+                positive = 0;
+                negative = 0;
             }
-            if(nums[i]<0)
-            {
-                negative_count++;
+            else if(x > 0) {
+                positive++;
+                negative = negative == 0 ? 0  : negative+1;
             }
-            if(negative_count%2==0)
-            {
-                maxLen=Math.max(maxLen,i-index+1);
+            else {
+                int temp = positive;
+                positive = negative == 0 ? 0  : negative+1;
+                negative = temp+1;
             }
+            ans = Math.max(ans, positive);
         }
-        negative_count=0;
-        index=nums.length-1;
-        for(int i=nums.length-1;i>=0;i--)
-        {
-            if(nums[i]==0)
-            {
-                index=i-1;
-                negative_count=0;
-                continue;
-            }
-            if(nums[i]<0)
-            {
-                negative_count++;
-            }
-            if(negative_count%2==0)
-            {
-                maxLen=Math.max(maxLen,index-i+1);
-            }
-        }
-
-        return maxLen;
+        return ans;
     }
 }
