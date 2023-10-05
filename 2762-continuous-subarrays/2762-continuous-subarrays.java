@@ -1,29 +1,53 @@
 class Solution {
-    public long continuousSubarrays(int[] nums) {
-        int i = 0;              // Left pointer of the sliding window
-        int j = 0;              // Right pointer of the sliding window
-        int n = nums.length;    // Length of the input array
-        long res = 0;           // Result variable to count continuous subarrays
-        TreeMap<Integer, Integer> map = new TreeMap<>(); // TreeMap to keep track of element frequencies
+public long continuousSubarrays(int[] nums) {
+        
+        Deque<Integer> maxQ = new LinkedList<>(); //  max q
+        Deque<Integer> minQ = new LinkedList<>(); // min q
 
-        while (j < n) {
-            map.put(nums[j], map.getOrDefault(nums[j], 0) + 1);
-
-            // Check if the maximum difference within the window is greater than 2
-            while (map.lastEntry().getKey() - map.firstEntry().getKey() > 2) {
-                map.put(nums[i], map.get(nums[i]) - 1);
-                if (map.get(nums[i]) == 0) {
-                    map.remove(nums[i]);
+        int jBad = -1;
+		
+        long count = 0;
+        for(int i = 0; i  < nums.length; i++) {
+            
+            while(!maxQ.isEmpty() && nums[maxQ.peekLast()] < nums[i])
+                maxQ.pollLast();
+            
+            maxQ.addLast(i);
+            
+             while(!minQ.isEmpty() && nums[minQ.peekLast()] > nums[i])
+                minQ.pollLast();
+            
+            minQ.addLast(i);
+            
+            
+            if(Math.abs(nums[maxQ.peekFirst()] -  nums[minQ.peekFirst()]) <= 2) 
+                count = count + Math.max(0, i - jBad);
+            
+            else {
+                int index = -1;
+                if(minQ.peekFirst() == i) {
+                    while(!maxQ.isEmpty() && (Math.abs(nums[maxQ.peekFirst()] -  nums[minQ.peekFirst()])) > 2) {
+                        int temp  = maxQ.pollFirst();
+                        if(temp > jBad && temp > index)
+                             index = temp;
+                    }
                 }
-                i++; // Shrink the window from the left
-            }
-
-            // Update the result with the count of valid subarrays within the window
-            res += j - i + 1;
-
-            j++; // Expand the window from the right
+                    
+        
+                   
+                else {
+                     while(!minQ.isEmpty() && (Math.abs(nums[maxQ.peekFirst()] -  nums[minQ.peekFirst()])) > 2) {
+                        int temp  = minQ.pollFirst();
+                        if(temp > jBad && temp > index)
+                             index = temp;
+                    }
+                }
+                           
+              jBad = index;
+              count = count + Math.max(0, i - jBad);              
+            }   
         }
-
-        return res;
+      return count;                  
     }
+    
 }
