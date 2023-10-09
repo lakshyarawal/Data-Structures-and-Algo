@@ -1,20 +1,33 @@
 public class Solution {
     public int minOperations(String s1, String s2, int x) {
-        int n = s1.length(), done = 0, inf = 1000000, one = inf, last = inf, two = inf;
+        char[] s1Chars = s1.toCharArray();
+        char[] s2Chars = s2.toCharArray();
+        int n = s1.length();
+
+        List<Integer> diffs = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            if (s1.charAt(i) == s2.charAt(i)) {
-                last++;
-                two++;
-            } else if (done < n) {
-                one = Math.min(done, two + 1);
-                last = Math.min(done, two + x);
-                done = two = inf;
-            } else {
-                done = Math.min(one + x, last + 1);
-                two = one;
-                one = last = inf;
+            if (s1Chars[i] != s2Chars[i]) {
+                diffs.add(i);
             }
         }
-        return done < inf ? done : -1;
+
+        int diffCount = diffs.size();
+        if (diffCount % 2 == 1) {
+            return -1;
+        }
+        if (diffCount == 0) {
+            return 0;
+        }
+
+        double[] dp = new double[diffCount + 1];
+        Arrays.fill(dp, Double.POSITIVE_INFINITY);
+        dp[diffCount] = 0;
+        dp[diffCount - 1] = x / 2.0;
+
+        for (int idx = diffCount - 2; idx >= 0; idx--) {
+            dp[idx] = Math.min(dp[idx + 1] + x / 2.0, dp[idx + 2] + diffs.get(idx + 1) - diffs.get(idx));
+        }
+
+        return (int) dp[0];
     }
 }
