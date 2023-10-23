@@ -16,11 +16,9 @@ public class Solution {
         }
 
         int mn = Integer.MAX_VALUE;
-
         for (int i = 1; i < n - 1; i++) {
             if (l[i] < nums[i] && r[i] < nums[i]) {
-                int sum = l[i] + nums[i] + r[i];
-                mn = Math.min(mn, sum);
+                mn = Math.min(mn, l[i] + nums[i] + r[i]);
             }
         }
 
