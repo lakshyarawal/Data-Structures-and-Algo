@@ -1,27 +1,15 @@
 class Solution {
-    int[][] dp = new int[1001][1001];
-
-    public int solve(int s, int[] v, int pow) {
-        int n = v.length;
-        if (s >= n)
-            return 0;
-        if (dp[s][pow] != -1)
-            return dp[s][pow];
-        if (pow == 0) {
-            return v[s] + solve(s + 1, v, s + 1);
+    int[] dp = new int[1001];
+    int solve(int[] prices, int i){
+        if(i >= prices.length) return 0;
+        if(dp[i] != 0) return dp[i];
+        int res = Integer.MAX_VALUE;
+        for(int j = i+1; j <= 2*i + 2; ++j) {
+            res = Math.min(res, solve(prices, j));
         }
-        int ans = solve(s + pow, v, 0);
-        for (int i = s; i <= Math.min(n - 1, s + pow - 1); i++) {
-            ans = Math.min(ans, v[i] + solve(i + 1, v, i + 1));
-        }
-        return dp[s][pow] = ans;
+        return dp[i] = res + prices[i];
     }
     public int minimumCoins(int[] prices) {
-        int n = prices.length;
-        for (int[] row : dp) {
-            Arrays.fill(row, -1);
-        }
-        int ans = solve(0, prices, 0);
-        return ans;
+        return solve(prices, 0);
     }
 }
