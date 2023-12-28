@@ -1,11 +1,7 @@
 class Solution:
     def shuffle(self, nums: List[int], n: int) -> List[int]:
-        left  = 0
-        right = n
-        result = []
-        while(left < n):  # You should loop only until n (the original size of one half)
-            result.append(nums[left])
-            result.append(nums[right])
-            left = left + 1
-            right = right + 1
-        return result
+        new_nums = [] # create an empty list
+        for i in range(len(nums)//2): # loop through only half of the list
+            new_nums.append(nums[i]) # append the first element
+            new_nums.append(nums[i+n]) # append the [i+n]'th element
+        return new_nums # returned the filled list
