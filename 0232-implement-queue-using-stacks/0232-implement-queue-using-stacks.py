@@ -1,22 +1,23 @@
-class MyQueue:
-
+class MyQueue(object):
     def __init__(self):
-        self.queue=[]
-
-    def push(self, x: int) -> None:
-        self.queue.insert(0,x)
-
-    def pop(self) -> int:
-        return self.queue.pop()
-
-    def peek(self) -> int:
-        return self.queue[-1]
-
-    def empty(self) -> bool:
-        if len(self.queue)>0:
-            return False
-        else:
-            return True
+        self.in_stk = []
+        self.out_stk = []
+	# Push element x to the back of queue...
+    def push(self, x):
+        self.in_stk.append(x)
+	# Remove the element from the front of the queue and returns it...
+    def pop(self):
+        self.peek()
+        return self.out_stk.pop()
+	# Get the front element...
+    def peek(self):
+        if not self.out_stk:
+            while self.in_stk:
+                self.out_stk.append(self.in_stk.pop())
+        return self.out_stk[-1]
+	# Return whether the queue is empty...
+    def empty(self):
+        return not self.in_stk and not self.out_stk
         
 
 
