@@ -1,9 +1,9 @@
 class Solution:
-    def __init__(self):
-        self.dirs = [[0, 1], [1, 0], [0, -1], [-1, 0]]
+        
     def dfs(self, r, c, grid, t, time):
-        for dir in self.dirs:
-            newr, newc = r + dir[0], c + dir[1]
+        dirs = [[0, 1], [1, 0], [0, -1], [-1, 0]]
+        for dir_ in dirs:
+            newr, newc = r + dir_[0], c + dir_[1]
             if (
                 newr >= len(grid)
                 or newr < 0
