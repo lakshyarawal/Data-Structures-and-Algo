@@ -11,14 +11,15 @@ class Solution:
         :type k: int
         :rtype: int
         """
+        def helper(node):
+            if not node:
+                return
+
+            helper(node.left)
+            count.append(node.val)
+            helper(node.right)
+            
         count = []
-        self.helper(root, count)
+        helper(root)
         return count[k-1]
         
-    def helper(self, node, count):
-        if not node:
-            return
-        
-        self.helper(node.left, count)
-        count.append(node.val)
-        self.helper(node.right, count)
