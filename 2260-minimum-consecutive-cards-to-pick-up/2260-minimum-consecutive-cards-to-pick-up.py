@@ -1,9 +1,6 @@
 class Solution:
     def minimumCardPickup(self, cards: List[int]) -> int:
-        start = 0
-        end = 0
-        INT_MAX = 100_000_000
-        res = INT_MAX
+        start, end, INT_MAX, res = 0, 0, 100_000_000, 100_000_000
         seen_cards = {}
         while end < len(cards):
             if cards[end] in seen_cards:
