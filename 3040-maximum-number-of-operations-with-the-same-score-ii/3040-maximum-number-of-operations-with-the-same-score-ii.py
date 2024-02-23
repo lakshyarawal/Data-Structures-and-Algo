@@ -1,21 +1,30 @@
 class Solution:
-    def maxOperations(self, nums):
-        n = len(nums)
-
-        @lru_cache(None)
-        def dfs(l,r,score):
-            if l >= n or r <= 0 or l >= r:
-                return 0 
-
-            max_count = 0
-
-            if nums[l] + nums[r] == score:
-                max_count = max(max_count,1+dfs(l+1,r-1,score))
-            if l+1 <= r and nums[l] + nums[l+1] == score:
-                max_count = max(max_count,1+dfs(l+2,r,score))
-            if r-1 >= l and nums[r] + nums[r-1] == score:
-                max_count = max(max_count,1+dfs(l,r-2,score))
-
-            return max_count
-
-        return 1 + max(dfs(2,n-1,nums[0]+nums[1]),dfs(1,n-2,nums[0]+nums[-1]),dfs(0,n-3,nums[-1]+nums[-2]))
+    def maxOperations(self, nums: List[int]) -> int:
+        cache = {}
+        
+        def dfs(arr, prev):
+            
+            if (arr, prev) in cache:
+                return cache[(arr, prev)]
+            #valid basecase-1
+            if len(arr) == 2 and sum(arr) == prev:
+                return 1
+            #valid basecase-2
+            if len(arr) < 2:
+                return 0
+            
+            ans1, ans2, ans3 = 0,0,0
+            if (prev==0 or (prev == arr[0]+arr[1])):
+                #delete first and second element
+                ans1 = 1 + dfs(arr[2:], arr[0] + arr[1]) 
+            if (prev==0 or (prev == arr[-1] + arr[-2])):
+                #delete last and second last element
+                ans2 = 1 + dfs(arr[:-2], arr[-2] + arr[-1]) 
+            if (prev==0 or (prev == arr[0] + arr[-1])):
+                #delete first and last element
+                ans3 = 1 + dfs(arr[1:-1], arr[0] + arr[-1]) 
+            
+            cache[tuple([arr, prev])] = max(ans1, ans2, ans3)
+            return max(ans1, ans2, ans3)
+        
+        return dfs(tuple(nums), 0)
